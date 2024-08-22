@@ -1,0 +1,26 @@
+.weather-card {
+  position: relative;
+  display: flex;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.weather-card__temp {
+  font-size: 36px;
+  line-height: 40px;
+  margin: 0;
+  position: absolute;
+  top: 20px;
+  left: 16px;
+}
+
+.weather-card__image {
+  position: absolute; /* Position the image absolutely within the container */
+  top: 0;
+  right: 0;
+  height: 100%; /* Make the image's height fill the container */
+  object-fit: cover;
+  object-position: right top; /* Ensure the image's top right corner is the reference point */
+}
