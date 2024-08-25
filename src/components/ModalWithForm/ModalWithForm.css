@@ -40,9 +40,12 @@
   position: absolute;
   top: 20px;
   right: 28px;
-  background: transparent url("../../images/close.svg") no-repeat center;
+  background: transparent url("../../assets/close.svg") no-repeat center;
   border: none;
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
 }
 
 .modal__title {

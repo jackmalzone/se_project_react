@@ -11,7 +11,7 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
 
   const handleAddButtonClick = () => {
-    setActiveModal("opened");
+    setActiveModal("add-garment");
   };
 
   const closeActiveModal = () => {
@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="page">
       <div className="page__content">
-        <Header onAddButtonClick={setActiveModal} />
+        <Header handleAddButtonClick={handleAddButtonClick} />
         <Main weatherData={weatherData} />
         <Footer />
       </div>

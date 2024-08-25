@@ -10,6 +10,7 @@
 
 .header__button-add-clothes {
   margin: 0 20px 0 auto;
+  cursor: pointer;
 }
 
 .header__profile {
