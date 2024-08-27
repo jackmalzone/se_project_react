@@ -1,9 +1,11 @@
 import "./Footer.css";
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="footer">
-      <p className="footer__text">© 2021 Jack Malzone</p>
+      <h3 className="footer__text">Developed by Jack Malzone</h3>
+      <p className="footer__copyright">© {currentYear}</p>
     </footer>
   );
 }

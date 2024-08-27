@@ -9,18 +9,21 @@
 }
 
 .header__button-add-clothes {
-  margin: 0 20px 0 auto;
+  margin: 0 18px 0 auto;
   cursor: pointer;
+  border: none;
+  background: #f3f3f3;
 }
 
 .header__profile {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin: 0;
 }
 
 .header__username {
-  margin: 0;
+  margin: 0 12px 0 0;
 }
 
 .header__avatar {

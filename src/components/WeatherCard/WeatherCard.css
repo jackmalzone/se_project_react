@@ -14,6 +14,8 @@
   position: absolute;
   top: 20px;
   left: 16px;
+  z-index: 2;
+  color: #ffffff;
 }
 
 .weather-card__image {
@@ -21,6 +23,10 @@
   top: 0;
   right: 0;
   height: 100%; /* Make the image's height fill the container */
+  width: auto;
   object-fit: cover;
   object-position: right top; /* Ensure the image's top right corner is the reference point */
+}
+
+@media (max-width: 600px) {
 }

@@ -2,7 +2,7 @@ import "./Header.css";
 import headerLogo from "../../assets/logo.svg";
 import avatar from "../../assets/avatar-placeholder.png";
 
-function Header({ handleAddButtonClick }) {
+function Header({ handleAddButtonClick, weatherData }) {
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -10,18 +10,21 @@ function Header({ handleAddButtonClick }) {
 
   return (
     <header className="header">
-      <img src={headerLogo} alt="" className="header__logo" />
-      <p className="header__spacetime">{`${currentDate}, Location`}</p>
+      <img src={headerLogo} alt="Header wtwr logo" className="header__logo" />
+      <p className="header__spacetime">{`${currentDate}, ${
+        weatherData.city || "Loading..."
+      }`}</p>
       <button
         onClick={handleAddButtonClick}
         type="button"
         className="header__button-add-clothes"
+        aria-label="Add new clothes"
       >
         + Add Clothes
       </button>
       <div className="header__profile">
         <p className="header__username">Name</p>
-        <img src={avatar} alt="" className="header__avatar" />
+        <img src={avatar} alt="User avatar" className="header__avatar" />
       </div>
     </header>
   );

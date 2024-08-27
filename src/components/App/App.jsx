@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../utils/index.css";
 import "./App.css";
+import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import ItemModal from "../ItemModal/ItemModal";
+import { getWeather, filterWeatherData } from "../../utils/weatherApi";
 
 function App() {
-  const [weatherData, setWeatherData] = useState({ type: "cold" });
+  const [weatherData, setWeatherData] = useState({
+    type: "",
+    temp: { F: null },
+    city: "",
+  });
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
 
@@ -25,10 +31,25 @@ function App() {
     setActiveModal("");
   };
 
+  useEffect(() => {
+    getWeather(coordinates, APIkey)
+      .then((data) => {
+        const filteredData = filterWeatherData(data);
+        setWeatherData(filteredData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch weather data:", error);
+      });
+  }, []);
+
   return (
     <div className="page">
       <div className="page__content">
-        <Header handleAddButtonClick={handleAddButtonClick} />
+        <Header
+          handleAddButtonClick={handleAddButtonClick}
+          weatherData={weatherData}
+        />
         <Main weatherData={weatherData} handleCardClick={handleCardClick} />
         <Footer />
       </div>
@@ -45,6 +66,7 @@ function App() {
             className="modal__input"
             id="name"
             placeholder="Name"
+            aria-label="Garment name"
           />
         </label>
         <label htmlFor="imageUrl" className="modal__label">
@@ -54,6 +76,7 @@ function App() {
             className="modal__input"
             id="imageUrl"
             placeholder="Image URL"
+            aria-label="Image URL"
           />
         </label>
         <fieldset className="modal__radio-buttons">
