@@ -1,6 +1,7 @@
 .cards__list {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   /* justify-content: space-around; */
   margin: 34px auto 171px;
   padding: 0;
