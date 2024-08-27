@@ -36,7 +36,6 @@ function App() {
       .then((data) => {
         const filteredData = filterWeatherData(data);
         setWeatherData(filteredData);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Failed to fetch weather data:", error);
