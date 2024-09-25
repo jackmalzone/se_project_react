@@ -8,8 +8,21 @@
   margin-right: 24px;
 }
 
+.header__spacetime {
+  margin-right: auto;
+}
+
+.header__controls {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.header__toggle-switch {
+  margin-right: 20px;
+}
+
 .header__button-add-clothes {
-  margin: 0 18px 0 auto;
   cursor: pointer;
   border: none;
   background: #f3f3f3;
@@ -30,5 +43,4 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 20px;
 }

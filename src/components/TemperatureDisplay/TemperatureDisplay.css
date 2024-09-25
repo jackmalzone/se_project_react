@@ -1,0 +1,8 @@
+.temperature-display {
+  display: inline-block;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.temperature-display.fade {
+  opacity: 0;
+}
