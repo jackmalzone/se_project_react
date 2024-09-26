@@ -8,6 +8,7 @@ import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import ItemModal from "../ItemModal/ItemModal";
+import AddItemModal from "../AddItemModal/AddItemModal";
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
 
 function App() {
@@ -35,6 +36,11 @@ function App() {
 
   const handleToggleSwitchChange = () => {
     setCurrentTemperatureUnit((prevUnit) => (prevUnit === "F" ? "C" : "F"));
+  };
+
+  const handleAddItem = (e, values) => {
+    e.preventDefault();
+    console.log(values);
   };
 
   useEffect(() => {
@@ -67,7 +73,11 @@ function App() {
           <Footer />
         </div>
         {activeModal === "add-garment" && (
-          <AddItemModal activeModal={activeModal} onClose={closeActiveModal} />
+          <AddItemModal
+            isOpen={activeModal === "add-garment"}
+            onClose={closeActiveModal}
+            onAddItem={handleAddItem}
+          />
         )}
         {activeModal === "preview" && (
           <ItemModal

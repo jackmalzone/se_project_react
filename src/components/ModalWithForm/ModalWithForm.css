@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #0000004d;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,9 +18,9 @@
 }
 
 .modal__opened {
-  opacity: 1;
   visibility: visible;
-  transition: opacity 0.5s ease;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.3s ease;
 }
 
 .modal__content {
@@ -34,6 +34,12 @@
   max-width: 496px;
   box-sizing: border-box;
   width: 100%;
+}
+
+.modal__opened {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.3s ease;
 }
 
 .modal__close {
@@ -62,6 +68,10 @@
   margin: 24px 0;
 }
 
+.modal__label_type_radio {
+  gap: 10px;
+}
+
 .modal__input {
   display: block;
   width: 100%;
@@ -69,6 +79,10 @@
   border-bottom: 1px solid #000000;
   outline: none;
   margin: 8px 0 0;
+}
+
+.modal__radio-input {
+  margin: 0 8px 0 0;
 }
 
 .modal__input::placeholder {
