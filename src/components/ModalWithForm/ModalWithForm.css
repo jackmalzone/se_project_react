@@ -11,12 +11,12 @@
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.5s, opacity 0.5s ease;
+  z-index: 1000;
 }
 
-.modal_opened {
+.modal__opened {
   opacity: 1;
   visibility: visible;
-  opacity: 1;
   transition: visibility 0s, opacity 0.3s ease;
 }
 
@@ -28,12 +28,6 @@
   max-width: 496px;
   box-sizing: border-box;
   width: 100%;
-}
-
-.modal__opened {
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 0s, opacity 0.3s ease;
 }
 
 .modal__close {

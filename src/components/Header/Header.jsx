@@ -9,6 +9,11 @@ function Header({ handleAddButtonClick, weatherData }) {
     day: "numeric",
   });
 
+  const onAddButtonClick = () => {
+    console.log("Add Clothes button clicked");
+    handleAddButtonClick();
+  };
+
   return (
     <header className="header">
       <img src={headerLogo} alt="Header wtwr logo" className="header__logo" />
@@ -18,7 +23,7 @@ function Header({ handleAddButtonClick, weatherData }) {
       <div className="header__controls">
         <ToggleSwitch className="header__toggle-switch" />
         <button
-          onClick={handleAddButtonClick}
+          onClick={onAddButtonClick}
           type="button"
           className="header__button-add-clothes"
           aria-label="Add new clothes"
