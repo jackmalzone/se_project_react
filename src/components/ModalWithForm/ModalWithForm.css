@@ -8,16 +8,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Cabinet Grotesk", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.25;
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.5s, opacity 0.5s ease;
 }
 
-.modal__opened {
+.modal_opened {
+  opacity: 1;
   visibility: visible;
   opacity: 1;
   transition: visibility 0s, opacity 0.3s ease;
@@ -27,9 +24,6 @@
   position: relative;
   background-color: #ffffff;
   border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
   padding: 28px 28px 36px;
   max-width: 496px;
   box-sizing: border-box;

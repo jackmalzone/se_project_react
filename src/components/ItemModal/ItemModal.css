@@ -1,4 +1,4 @@
-.item-modal {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,20 +8,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Cabinet Grotesk", Arial, sans-serif;
-  border-radius: 12px;
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.5s, opacity 0.5s ease;
 }
 
-.item-modal__opened {
+.modal_opened {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.5s ease;
 }
 
-.item-modal__content {
+.modal_type_item .modal__content {
   padding: 0;
   background-color: #ffffff;
   max-width: 498px;
@@ -30,7 +28,7 @@
   box-sizing: border-box;
 }
 
-.item-modal__close {
+.modal_type_item .modal__close {
   position: absolute;
   top: 20px;
   right: 28px;
@@ -42,10 +40,10 @@
   z-index: 2;
 }
 
-.item-modal__image {
+.modal_type_item .modal__image {
   width: 100%;
-  height: auto; /* Maintain aspect ratio */
-  object-fit: contain; /* Adjust this if cover doesn't give the desired effect */
+  height: auto;
+  object-fit: contain;
   object-position: center;
   box-sizing: border-box;
   max-width: 100%;
@@ -54,11 +52,11 @@
   border-radius: 12px 12px 0 0;
 }
 
-.item-modal__caption {
+.modal_type_item .modal__caption {
   margin: 0 0 12px;
 }
 
-.item-modal__weather {
+.modal_type_item .modal__weather {
   margin: 0;
   padding: 0;
   font-size: 20px;
@@ -66,7 +64,7 @@
   line-height: 1.2;
 }
 
-.item-modal__footer {
+.modal_type_item .modal__footer {
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
