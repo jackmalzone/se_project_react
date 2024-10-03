@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 import "../../utils/index.css";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
+import Profile from "../Profile/Profile";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
-import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
-
+import { getItems } from "../../utils/api";
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
@@ -20,18 +21,23 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+  const [userAvatar, setUserAvatar] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [clothingItems, setClothingItems] = useState([]);
 
   const handleCardClick = (card) => {
+    console.log("Card clicked:", card);
     setActiveModal("preview");
     setSelectedCard(card);
   };
 
   const handleAddButtonClick = () => {
-    console.log("Setting active modal to add-garment");
+    console.log("Add button clicked, setting activeModal to 'add-garment'");
     setActiveModal("add-garment");
   };
 
   const closeActiveModal = () => {
+    console.log("Closing active modal");
     setActiveModal(null);
   };
 
@@ -62,6 +68,17 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    getItems()
+      .then((data) => {
+        console.log(data);
+        setClothingItems(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch items:", error);
+      });
+  }, []);
+
   return (
     <CurrentTempUnitContext.Provider
       value={{ currentTemperatureUnit, handleToggleSwitchChange }}
@@ -71,35 +88,32 @@ function App() {
           <Header
             handleAddButtonClick={handleAddButtonClick}
             weatherData={weatherData}
+            avatar={userAvatar}
+            username={userName}
           />
-          <Main weatherData={weatherData} handleCardClick={handleCardClick} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Main
+                  weatherData={weatherData}
+                  handleCardClick={handleCardClick}
+                  clothingItems={clothingItems}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={<Profile onCardClick={handleCardClick} />}
+            />
+          </Routes>
           <Footer />
         </div>
         {activeModal === "add-garment" && (
-          <AddItemModal
-            isOpen={true}
-            onClose={closeActiveModal}
-            onAddItem={handleAddItem}
-          />
+          <AddItemModal onClose={closeActiveModal} onAddItem={handleAddItem} />
         )}
-        <div
-          style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            background: "white",
-            padding: "10px",
-            zIndex: 10000,
-          }}
-        >
-          Debug: activeModal = {activeModal}
-        </div>
         {activeModal === "preview" && (
-          <ItemModal
-            activeModal={activeModal}
-            card={selectedCard}
-            onClose={closeActiveModal}
-          />
+          <ItemModal card={selectedCard} onClose={closeActiveModal} />
         )}
       </div>
     </CurrentTempUnitContext.Provider>

@@ -5,6 +5,12 @@
   justify-content: center;
   width: 323px;
   border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.03);
 }
 
 .card__name {

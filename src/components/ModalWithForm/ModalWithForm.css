@@ -28,6 +28,12 @@
   max-width: 496px;
   box-sizing: border-box;
   width: 100%;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.modal__opened .modal__content {
+  transform: scale(1);
 }
 
 .modal__close {

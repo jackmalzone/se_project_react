@@ -1,63 +1,46 @@
 import "./ModalWithForm.css";
+import React, { useEffect, useState } from "react";
 
-function ModalWithForm({
-  children,
-  buttonText,
-  title,
-  isOpen,
-  onClose,
-  onSubmit,
-}) {
-  console.log("ModalWithForm rendered, isOpen:", isOpen);
+const ModalWithForm = React.forwardRef(
+  ({ title, onClose, onSubmit, children, buttonText }, ref) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <>
-      <div
-        style={{
-          position: "fixed",
-          top: "30px",
-          left: 0,
-          background: "lime",
-          padding: "10px",
-          zIndex: 10000,
-        }}
-      >
-        ModalWithForm Debug: isOpen = {isOpen.toString()}
-      </div>
-      <div
-        className={`modal ${isOpen ? "modal__opened" : ""}`}
-        style={{
-          position: "fixed !important",
-          top: "50% !important",
-          left: "50% !important",
-          transform: "translate(-50%, -50%) !important",
-          backgroundColor: "red !important",
-          padding: "20px !important",
-          zIndex: 10001,
-          width: "200px !important",
-          height: "200px !important",
-          display: "block !important",
-          visibility: "visible !important",
-          opacity: 1,
-        }}
-      >
-        <div
-          className="modal__content"
-          style={{
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "10px",
-            maxWidth: "500px",
-            width: "100%",
-          }}
-        >
+    useEffect(() => {
+      setIsOpen(true);
+    }, []);
+
+    const handleClose = () => {
+      setIsOpen(false);
+      setTimeout(onClose, 300); // Delay closing to allow for transition
+    };
+
+    useEffect(() => {
+      const handleMouseDown = (e) => {
+        if (e.target.classList.contains("modal")) {
+          handleClose();
+        }
+      };
+
+      const modal = ref.current;
+      if (modal) {
+        modal.addEventListener("mousedown", handleMouseDown);
+
+        return () => {
+          modal.removeEventListener("mousedown", handleMouseDown);
+        };
+      }
+    }, [onClose, ref]);
+
+    return (
+      <div className={`modal ${isOpen ? "modal__opened" : ""}`} ref={ref}>
+        <div className="modal__content">
           <h2 className="modal__title">{title}</h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             type="button"
             className="modal__close"
           ></button>
-          <form action="" className="modal__form" onSubmit={onSubmit}>
+          <form className="modal__form" onSubmit={onSubmit}>
             {children}
             <button type="submit" className="modal__submit">
               {buttonText}
@@ -65,8 +48,8 @@ function ModalWithForm({
           </form>
         </div>
       </div>
-    </>
-  );
-}
+    );
+  }
+);
 
 export default ModalWithForm;

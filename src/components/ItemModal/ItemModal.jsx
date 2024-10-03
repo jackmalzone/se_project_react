@@ -1,11 +1,45 @@
 import "./ItemModal.css";
+import React, { useState, useEffect } from "react";
 
-function ItemModal({ isOpen, onClose, card }) {
+function ItemModal({ onClose, card }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, []);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(onClose, 300); // Delay closing to allow for transition
+  };
+
+  useEffect(() => {
+    const handleEscClose = (e) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+
+    const handleOutsideClick = (e) => {
+      if (e.target.classList.contains("modal")) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscClose);
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <div className={`modal ${isOpen ? "modal_opened" : ""} modal_type_item`}>
+    <div className={`modal modal_type_item ${isOpen ? "modal__opened" : ""}`}>
       <div className="modal__content modal__content_type_image">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           type="button"
           className="modal__close"
           aria-label="Close modal"

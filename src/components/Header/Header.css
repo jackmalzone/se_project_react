@@ -6,6 +6,7 @@
 
 .header__logo {
   margin-right: 24px;
+  cursor: pointer;
 }
 
 .header__spacetime {
@@ -43,4 +44,28 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+.header__avatar_none {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px solid #000;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.header__avatar .header__avatar_none {
+  text-decoration: none;
+}
+
+.header__profile-link {
+  text-decoration: none;
+  color: #000;
 }

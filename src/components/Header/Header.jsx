@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import "./Header.css";
 import headerLogo from "../../assets/logo.svg";
-import avatar from "../../assets/avatar-placeholder.png";
+import avatarDefault from "../../assets/avatar-placeholder.png";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
-function Header({ handleAddButtonClick, weatherData }) {
+function Header({ handleAddButtonClick, weatherData, avatar, username }) {
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -16,7 +17,9 @@ function Header({ handleAddButtonClick, weatherData }) {
 
   return (
     <header className="header">
-      <img src={headerLogo} alt="Header wtwr logo" className="header__logo" />
+      <Link to="/">
+        <img src={headerLogo} alt="Header wtwr logo" className="header__logo" />
+      </Link>
       <p className="header__spacetime">{`${currentDate}, ${
         weatherData.city || "Loading..."
       }`}</p>
@@ -31,10 +34,22 @@ function Header({ handleAddButtonClick, weatherData }) {
           + Add Clothes
         </button>
       </div>
-      <div className="header__profile">
-        <p className="header__username">Name</p>
-        <img src={avatar} alt="User avatar" className="header__avatar" />
-      </div>
+      <Link to="/profile" className="header__profile-link">
+        <div className="header__profile">
+          <p className="header__username">{username || "Username"}</p>
+          {avatar ? (
+            <img
+              className="header__avatar"
+              src={avatar || avatarDefault}
+              alt="avatar"
+            />
+          ) : (
+            <span className="header__avatar header__avatar_none">
+              {username?.toUpperCase().charAt(0) || "U"}
+            </span>
+          )}
+        </div>
+      </Link>
     </header>
   );
 }
