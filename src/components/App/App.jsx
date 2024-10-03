@@ -24,6 +24,7 @@ function App() {
   const [userAvatar, setUserAvatar] = useState(null);
   const [userName, setUserName] = useState("");
   const [clothingItems, setClothingItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -76,8 +77,23 @@ function App() {
       })
       .catch((error) => {
         console.error("Failed to fetch items:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
+  const handleDeleteItem = (id) => {
+    deleteItem(id)
+      .then(() => {
+        setClothingItems((prevItems) =>
+          prevItems.filter((item) => item._id !== id)
+        );
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+      });
+  };
 
   return (
     <CurrentTempUnitContext.Provider
@@ -104,7 +120,16 @@ function App() {
             />
             <Route
               path="/profile"
-              element={<Profile onCardClick={handleCardClick} />}
+              element={
+                <Profile
+                  onCardClick={handleCardClick}
+                  clothingItems={clothingItems}
+                  onDeleteItem={handleDeleteItem}
+                  onAddNewClick={handleAddButtonClick}
+                  username={userName}
+                  avatar={userAvatar}
+                />
+              }
             />
           </Routes>
           <Footer />
@@ -113,7 +138,11 @@ function App() {
           <AddItemModal onClose={closeActiveModal} onAddItem={handleAddItem} />
         )}
         {activeModal === "preview" && (
-          <ItemModal card={selectedCard} onClose={closeActiveModal} />
+          <ItemModal
+            card={selectedCard}
+            onClose={closeActiveModal}
+            onDeleteItem={handleDeleteItem}
+          />
         )}
       </div>
     </CurrentTempUnitContext.Provider>

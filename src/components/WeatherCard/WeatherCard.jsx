@@ -7,8 +7,7 @@ import TemperatureDisplay from "../TemperatureDisplay/TemperatureDisplay";
 function WeatherCard({ weatherData }) {
   const { currentTemperatureUnit } = useContext(CurrentTempUnitContext);
 
-  const temperature =
-    currentTemperatureUnit === "F" ? weatherData.temp.F : weatherData.temp.C;
+  const temperature = weatherData.temp[currentTemperatureUnit];
 
   console.log("WeatherCard data:", weatherData);
   console.log("Current temperature unit:", currentTemperatureUnit);

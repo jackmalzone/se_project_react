@@ -1,4 +1,4 @@
-const baseUrl = "https://localhost:3001";
+const baseUrl = "http://localhost:3001";
 
 function getItems() {
   return fetch(`${baseUrl}/items`).then((res) => {
@@ -7,3 +7,14 @@ function getItems() {
 }
 
 export { getItems };
+
+export const deleteItem = (id) => {
+  return fetch(`${baseUrl}/items/${id}`, {
+    method: "DELETE",
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  });
+};

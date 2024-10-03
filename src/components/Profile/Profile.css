@@ -1,5 +1,20 @@
 .profile {
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  flex-grow: 1;
+}
+
+.profile__content {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile__sidebar {
+  flex-shrink: 0;
+  margin-right: 100px;
+}
+
+.profile__clothing-items {
+  max-width: 1015px;
+  flex-grow: 1;
 }

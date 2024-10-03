@@ -1,11 +1,17 @@
 import "./SideBar.css";
-import avatar from "../../assets/avatar-placeholder.png";
+import avatarDefault from "../../assets/avatar-placeholder.png";
 
-function SideBar() {
+function SideBar({ username, avatar }) {
   return (
     <div className="sidebar">
-      <img src={avatar} alt="avatar" className="sidebar__avatar" />
-      <p className="sidebar__username">Username</p>
+      {avatar ? (
+        <img src={avatar} alt="Avatar" className="sidebar__avatar" />
+      ) : (
+        <div className="sidebar__avatar sidebar__avatar_none">
+          {username?.toUpperCase().charAt(0) || "U"}
+        </div>
+      )}
+      <p className="sidebar__username">{username || "Username"}</p>
     </div>
   );
 }

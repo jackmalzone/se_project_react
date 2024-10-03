@@ -14,6 +14,17 @@
   z-index: 999;
 }
 
+.modal__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 20px;
+}
+
+.modal__weather {
+  font-size: 20px;
+}
+
 .modal_opened {
   opacity: 1;
   visibility: visible;
@@ -77,4 +88,18 @@
   font-weight: 700;
   line-height: 1.2;
   padding: 32px;
+}
+
+.modal__delete-button {
+  background: none;
+  border: none;
+  color: #ff4d00;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  margin: 5px 0 0;
+}
+
+.modal__delete-button:hover {
+  opacity: 0.7;
 }

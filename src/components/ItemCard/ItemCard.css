@@ -18,9 +18,15 @@
   position: absolute;
   top: 15px;
   margin: 0;
+  padding: 2px 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.25;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .card__image {

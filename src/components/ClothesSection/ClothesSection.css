@@ -1,8 +1,12 @@
+.clothes-section {
+  width: 100%;
+}
+
 .clothes-section__items {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  margin: 34px auto 171px;
+  margin: 0;
   padding: 0;
   list-style: none;
   gap: 21px;
@@ -10,22 +14,26 @@
 
 .clothes-section__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
+  margin: 20px 0 16px;
+  padding: 0;
+  /* height: 64px; */
 }
 
 .clothes-section__title {
   font-size: 20px;
   line-height: 1.25;
-  margin: 0;
+  margin: 0 20px 0 0;
+  padding: 0;
 }
 
 .clothes-section__add-button {
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.25;
   border: none;
   background: none;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+  padding: 0;
 }

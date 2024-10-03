@@ -1,18 +1,19 @@
 import "./ModalWithForm.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const ModalWithForm = React.forwardRef(
   ({ title, onClose, onSubmit, children, buttonText }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
       setIsOpen(true);
     }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
       setIsOpen(false);
-      setTimeout(onClose, 300); // Delay closing to allow for transition
-    };
+      setTimeout(onClose, 300);
+    }, [onClose]);
 
     useEffect(() => {
       const handleMouseDown = (e) => {
@@ -29,7 +30,18 @@ const ModalWithForm = React.forwardRef(
           modal.removeEventListener("mousedown", handleMouseDown);
         };
       }
-    }, [onClose, ref]);
+    }, [handleClose, ref]);
+
+    const handleValidation = (e) => {
+      setIsValid(e.target.closest("form").checkValidity());
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (isValid) {
+        onSubmit(e);
+      }
+    };
 
     return (
       <div className={`modal ${isOpen ? "modal__opened" : ""}`} ref={ref}>
@@ -40,9 +52,13 @@ const ModalWithForm = React.forwardRef(
             type="button"
             className="modal__close"
           ></button>
-          <form className="modal__form" onSubmit={onSubmit}>
+          <form
+            className="modal__form"
+            onSubmit={handleSubmit}
+            onChange={handleValidation}
+          >
             {children}
-            <button type="submit" className="modal__submit">
+            <button type="submit" className="modal__submit" disabled={!isValid}>
               {buttonText}
             </button>
           </form>

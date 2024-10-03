@@ -1,0 +1,55 @@
+.delete-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 60px 151px 60px 152px;
+}
+
+.delete-modal__content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 670px;
+  text-align: center;
+}
+
+.delete-modal__message {
+  margin-bottom: 20px;
+  max-width: 367px;
+}
+
+.delete-modal__buttons {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.delete-modal__button {
+  font-size: 16px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.3s;
+}
+
+.delete-modal__button_confirm {
+  color: #ff4d00;
+}
+
+.delete-modal__button_cancel {
+  color: #000;
+}
+
+.delete-modal__button:hover {
+  opacity: 0.7;
+}
