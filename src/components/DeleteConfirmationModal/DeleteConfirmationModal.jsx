@@ -7,6 +7,12 @@ function DeleteConfirmationModal({ isOpen, onClose, onConfirm }) {
   return (
     <div className="delete-modal">
       <div className="delete-modal__content">
+        <button
+          onClick={onClose}
+          type="button"
+          className="delete-modal__close"
+          aria-label="Close modal"
+        />
         <p className="delete-modal__message">
           Are you sure you want to delete this item? This action is
           irreversible.

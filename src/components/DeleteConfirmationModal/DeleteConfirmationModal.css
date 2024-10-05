@@ -12,7 +12,27 @@
   padding: 60px 151px 60px 152px;
 }
 
+.delete-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-image: url("../../assets/close.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.delete-modal__close:hover {
+  opacity: 0.6;
+}
+
 .delete-modal__content {
+  position: relative;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
