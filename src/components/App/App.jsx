@@ -11,7 +11,7 @@ import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
-import { getItems } from "../../utils/api";
+import { getItems, deleteItem } from "../../utils/api";
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
