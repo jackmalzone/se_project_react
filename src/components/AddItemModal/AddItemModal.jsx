@@ -18,7 +18,12 @@ const AddItemModal = ({ onClose, onAddItem }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onAddItem({ name, weather, imageUrl });
+      const newItem = { name, weather, imageUrl };
+      console.log("Submitting new item:");
+      console.log("Name:", name);
+      console.log("Weather:", weather);
+      console.log("Image URL:", imageUrl);
+      onAddItem(newItem);
       onClose();
     }
   };
@@ -68,8 +73,9 @@ const AddItemModal = ({ onClose, onAddItem }) => {
   };
 
   const handleImageUrlChange = (e) => {
-    setImageUrl(e.target.value);
-    if (imageUrlError) setImageUrlError("");
+    const url = e.target.value;
+    setImageUrl(url);
+    console.log("Full Image URL:", url);
   };
 
   const handleWeatherChange = (e) => {
@@ -122,8 +128,6 @@ const AddItemModal = ({ onClose, onAddItem }) => {
           name="image"
           value={imageUrl}
           placeholder="Image URL"
-          minLength="1"
-          maxLength="30"
           aria-label="Image URL"
           required
           onChange={handleImageUrlChange}

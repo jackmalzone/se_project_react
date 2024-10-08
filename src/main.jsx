@@ -8,7 +8,7 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
-      <Router basename="/se_project_react">
+      <Router basename="/se_project_react/">
         <App />
       </Router>
     </ErrorBoundary>

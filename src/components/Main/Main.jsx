@@ -6,8 +6,12 @@ import ItemCard from "../ItemCard/ItemCard";
 import TemperatureDisplay from "../TemperatureDisplay/TemperatureDisplay";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 
-function Main({ weatherData, handleCardClick, clothingItems }) {
+function Main({ weatherData, handleCardClick, clothingItems, isLoading }) {
   const { currentTemperatureUnit } = useContext(CurrentTempUnitContext);
+
+  if (isLoading) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <main>
@@ -23,18 +27,16 @@ function Main({ weatherData, handleCardClick, clothingItems }) {
         </p>
         <ul className="cards__list">
           {clothingItems
-            .filter((item) => {
-              return item.weather === weatherData.type;
-            })
-            .map((item) => {
-              return (
-                <ItemCard
-                  key={item._id}
-                  item={item}
-                  onCardClick={handleCardClick}
-                />
-              );
-            })}
+            .filter((item) => item.weather === weatherData.type)
+            .map((item) => (
+              <ItemCard
+                key={
+                  item._id || item.id || Math.random().toString(36).substr(2, 9)
+                }
+                item={item}
+                onCardClick={handleCardClick}
+              />
+            ))}
         </ul>
       </section>
     </main>

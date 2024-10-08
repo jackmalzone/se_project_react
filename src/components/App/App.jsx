@@ -11,7 +11,8 @@ import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
-import { getItems, deleteItem } from "../../utils/api";
+import { getItems, addItem, deleteItem } from "../../utils/api";
+
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
@@ -21,8 +22,8 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
-  const [userAvatar, setUserAvatar] = useState(null);
-  const [userName, setUserName] = useState("");
+  const [userAvatar, _setUserAvatar] = useState(null);
+  const [userName, _setUserName] = useState("");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,8 +48,16 @@ function App() {
   };
 
   const handleAddItem = (item) => {
-    console.log("New item added:", item);
-    closeActiveModal();
+    console.log("Adding item in App:", JSON.stringify(item, null, 2));
+    addItem(item)
+      .then((newItem) => {
+        console.log("New item added:", JSON.stringify(newItem, null, 2));
+        setClothingItems((prevItems) => [newItem, ...prevItems]);
+        closeActiveModal();
+      })
+      .catch((error) => {
+        console.error("Error adding item:", error);
+      });
   };
 
   console.log("App rendering, activeModal:", activeModal);
@@ -57,9 +66,14 @@ function App() {
     getWeather(coordinates, APIkey)
       .then((data) => {
         const filteredData = filterWeatherData(data);
+        console.log("Filtered weather data:", filteredData);
         const tempF = filteredData.temp.F;
         const tempC = filteredData.temp.C || ((tempF - 32) * 5) / 9;
         setWeatherData({
+          ...filteredData,
+          temp: { F: tempF, C: tempC },
+        });
+        console.log("Set weather data:", {
           ...filteredData,
           temp: { F: tempF, C: tempC },
         });
@@ -115,6 +129,7 @@ function App() {
                   weatherData={weatherData}
                   handleCardClick={handleCardClick}
                   clothingItems={clothingItems}
+                  isLoading={isLoading}
                 />
               }
             />

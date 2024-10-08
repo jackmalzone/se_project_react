@@ -1,12 +1,7 @@
 import "./ClothesSection.css";
 import ItemCard from "../ItemCard/ItemCard.jsx";
 
-function ClothesSection({
-  onCardClick,
-  clothingItems = [],
-  onDeleteItem,
-  onAddNewClick,
-}) {
+function ClothesSection({ onCardClick, clothingItems = [], onAddNewClick }) {
   return (
     <div className="clothes-section">
       <div className="clothes-section__header">
@@ -18,7 +13,10 @@ function ClothesSection({
       <ul className="clothes-section__items">
         {clothingItems &&
           clothingItems.map((item) => (
-            <li key={item._id} className="clothes-section__item">
+            <li
+              key={item._id || item.id || Date.now().toString()}
+              className="clothes-section__item"
+            >
               <ItemCard item={item} onCardClick={onCardClick} />
             </li>
           ))}
