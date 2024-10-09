@@ -4,7 +4,7 @@ import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 
-const AddItemModal = ({ onClose, onAddItem }) => {
+const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   console.log("AddItemModal rendered");
 
   const modalRef = useRef(null);
@@ -46,6 +46,7 @@ const AddItemModal = ({ onClose, onAddItem }) => {
       ref={modalRef}
       buttonText="Add garment"
       isValid={isValid}
+      isLoading={isLoading}
     >
       <label
         htmlFor="name-input"

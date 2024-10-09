@@ -2,7 +2,10 @@ import "./ModalWithForm.css";
 import React, { useEffect, useState, useCallback } from "react";
 
 const ModalWithForm = React.forwardRef(
-  ({ title, onClose, onSubmit, children, buttonText, isValid }, ref) => {
+  (
+    { title, onClose, onSubmit, children, buttonText, isValid, isLoading },
+    ref
+  ) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
@@ -49,7 +52,11 @@ const ModalWithForm = React.forwardRef(
           ></button>
           <form className="modal__form" onSubmit={handleSubmit}>
             {children}
-            <button type="submit" className="modal__submit" disabled={!isValid}>
+            <button
+              type="submit"
+              className="modal__submit"
+              disabled={!isValid || isLoading}
+            >
               {buttonText}
             </button>
           </form>

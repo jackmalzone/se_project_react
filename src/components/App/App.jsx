@@ -25,7 +25,7 @@ function App() {
   const [userAvatar, setUserAvatar] = useState(null);
   const [userName, setUserName] = useState("");
   const [clothingItems, setClothingItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -49,6 +49,7 @@ function App() {
 
   const handleAddItem = (item) => {
     console.log("Adding item in App:", JSON.stringify(item, null, 2));
+    setIsLoading(true);
     return addItem(item)
       .then((newItem) => {
         console.log("New item added:", JSON.stringify(newItem, null, 2));
@@ -58,6 +59,9 @@ function App() {
       .catch((error) => {
         console.error("Error adding item:", error);
         throw error;
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -99,6 +103,7 @@ function App() {
   }, []);
 
   const handleDeleteItem = (id) => {
+    setIsLoading(true);
     return deleteItem(id)
       .then(() => {
         setClothingItems((prevItems) =>
@@ -108,6 +113,9 @@ function App() {
       .catch((error) => {
         console.error("Error deleting item:", error);
         throw error;
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -152,13 +160,18 @@ function App() {
           <Footer />
         </div>
         {activeModal === "add-garment" && (
-          <AddItemModal onClose={closeActiveModal} onAddItem={handleAddItem} />
+          <AddItemModal
+            onClose={closeActiveModal}
+            onAddItem={handleAddItem}
+            isLoading={isLoading}
+          />
         )}
         {activeModal === "preview" && (
           <ItemModal
             card={selectedCard}
             onClose={closeActiveModal}
             onDeleteItem={handleDeleteItem}
+            isLoading={isLoading}
           />
         )}
       </div>
