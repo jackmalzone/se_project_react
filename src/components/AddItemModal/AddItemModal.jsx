@@ -3,6 +3,7 @@ import "./AddItemModal.css";
 import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
+import { useEscape } from "../../hooks/useEscape";
 
 const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   console.log("AddItemModal rendered");
@@ -10,6 +11,8 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   const modalRef = useRef(null);
   const { values, handleChange, errors, isValid, resetForm } =
     useFormAndValidation();
+
+  useEscape(onClose);
 
   const handleSubmit = (e) => {
     e.preventDefault();

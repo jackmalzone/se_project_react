@@ -1,19 +1,22 @@
+import React, { useState, useEffect, useCallback } from "react";
 import "./ItemModal.css";
-import React, { useState, useEffect } from "react";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
+import { useEscape } from "../../hooks/useEscape";
 
 function ItemModal({ onClose, card, onDeleteItem }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setTimeout(onClose, 300);
+  }, [onClose]);
+
   useEffect(() => {
     setIsOpen(true);
   }, []);
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setTimeout(onClose, 300);
-  };
+  useEscape(handleClose);
 
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
@@ -30,26 +33,18 @@ function ItemModal({ onClose, card, onDeleteItem }) {
   };
 
   useEffect(() => {
-    const handleEscClose = (e) => {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    };
-
     const handleOutsideClick = (e) => {
       if (e.target.classList.contains("modal")) {
         handleClose();
       }
     };
 
-    document.addEventListener("keydown", handleEscClose);
     document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener("keydown", handleEscClose);
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []);
+  }, [handleClose]);
 
   return (
     <>
