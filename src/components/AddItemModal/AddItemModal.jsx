@@ -1,91 +1,34 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import "./AddItemModal.css";
 import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import { useFormAndValidation } from "../../hooks/useFormValidation";
 
 const AddItemModal = ({ onClose, onAddItem }) => {
   console.log("AddItemModal rendered");
 
   const modalRef = useRef(null);
-
-  const [name, setName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [weather, setWeather] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [imageUrlError, setImageUrlError] = useState("");
-  const [weatherError, setWeatherError] = useState("");
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const newItem = { name, weather, imageUrl };
-      console.log("Submitting new item:");
-      console.log("Name:", name);
-      console.log("Weather:", weather);
-      console.log("Image URL:", imageUrl);
+    if (isValid) {
+      const newItem = {
+        name: values.name,
+        weather: values.weather,
+        imageUrl: values.imageUrl,
+      };
+      console.log("Submitting new item:", newItem);
       onAddItem(newItem)
         .then(() => {
           onClose();
+          resetForm();
         })
         .catch((error) => {
           console.error("Error adding item:", error);
         });
     }
-  };
-
-  const validateForm = () => {
-    let isValid = true;
-
-    if (name.trim().length < 1 || name.trim().length > 30) {
-      setNameError("Name must be between 1 and 30 characters");
-      isValid = false;
-    } else {
-      setNameError("");
-    }
-
-    if (!imageUrl.trim()) {
-      setImageUrlError("Image URL is required");
-      isValid = false;
-    } else if (!isValidUrl(imageUrl)) {
-      setImageUrlError("Please enter a valid URL");
-      isValid = false;
-    } else {
-      setImageUrlError("");
-    }
-
-    if (!weather) {
-      setWeatherError("Please select a weather type");
-      isValid = false;
-    } else {
-      setWeatherError("");
-    }
-
-    return isValid;
-  };
-
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-    if (nameError) setNameError("");
-  };
-
-  const handleImageUrlChange = (e) => {
-    const url = e.target.value;
-    setImageUrl(url);
-    console.log("Full Image URL:", url);
-  };
-
-  const handleWeatherChange = (e) => {
-    setWeather(e.target.value);
-    if (weatherError) setWeatherError("");
   };
 
   useEffect(() => {
@@ -102,6 +45,7 @@ const AddItemModal = ({ onClose, onAddItem }) => {
       onSubmit={handleSubmit}
       ref={modalRef}
       buttonText="Add garment"
+      isValid={isValid}
     >
       <label
         htmlFor="name-input"
@@ -113,16 +57,16 @@ const AddItemModal = ({ onClose, onAddItem }) => {
           className="modal__input"
           type="text"
           name="name"
-          value={name}
+          value={values.name || ""}
           placeholder="Name"
           minLength="1"
           maxLength="30"
           aria-label="Garment name"
           required
-          onChange={handleNameChange}
+          onChange={handleChange}
           autoComplete="off"
         />
-        {nameError && <span className="modal__error">{nameError}</span>}
+        {errors.name && <span className="modal__error">{errors.name}</span>}
       </label>
       <label htmlFor="image-input" className="modal__label">
         Image
@@ -130,15 +74,17 @@ const AddItemModal = ({ onClose, onAddItem }) => {
           id="image-input"
           className="modal__input"
           type="url"
-          name="image"
-          value={imageUrl}
+          name="imageUrl"
+          value={values.imageUrl || ""}
           placeholder="Image URL"
           aria-label="Image URL"
           required
-          onChange={handleImageUrlChange}
+          onChange={handleChange}
           autoComplete="off"
         />
-        {imageUrlError && <span className="modal__error">{imageUrlError}</span>}
+        {errors.imageUrl && (
+          <span className="modal__error">{errors.imageUrl}</span>
+        )}
       </label>
 
       <fieldset className="modal__radio-buttons">
@@ -155,14 +101,16 @@ const AddItemModal = ({ onClose, onAddItem }) => {
               type="radio"
               name="weather"
               value={type}
-              checked={weather === type}
-              onChange={handleWeatherChange}
+              checked={values.weather === type}
+              onChange={handleChange}
               autoComplete="off"
             />
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </label>
         ))}
-        {weatherError && <span className="modal__error">{weatherError}</span>}
+        {errors.weather && (
+          <span className="modal__error">{errors.weather}</span>
+        )}
       </fieldset>
     </ModalWithForm>
   );

@@ -2,9 +2,8 @@ import "./ModalWithForm.css";
 import React, { useEffect, useState, useCallback } from "react";
 
 const ModalWithForm = React.forwardRef(
-  ({ title, onClose, onSubmit, children, buttonText }, ref) => {
+  ({ title, onClose, onSubmit, children, buttonText, isValid }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
       setIsOpen(true);
@@ -32,10 +31,6 @@ const ModalWithForm = React.forwardRef(
       }
     }, [handleClose, ref]);
 
-    const handleValidation = (e) => {
-      setIsValid(e.target.closest("form").checkValidity());
-    };
-
     const handleSubmit = (e) => {
       e.preventDefault();
       if (isValid) {
@@ -52,11 +47,7 @@ const ModalWithForm = React.forwardRef(
             type="button"
             className="modal__close"
           ></button>
-          <form
-            className="modal__form"
-            onSubmit={handleSubmit}
-            onChange={handleValidation}
-          >
+          <form className="modal__form" onSubmit={handleSubmit}>
             {children}
             <button type="submit" className="modal__submit" disabled={!isValid}>
               {buttonText}
