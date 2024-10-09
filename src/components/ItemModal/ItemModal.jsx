@@ -20,8 +20,13 @@ function ItemModal({ onClose, card, onDeleteItem }) {
   };
 
   const handleDeleteConfirm = () => {
-    onDeleteItem(card._id);
-    handleClose();
+    onDeleteItem(card._id)
+      .then(() => {
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+      });
   };
 
   useEffect(() => {

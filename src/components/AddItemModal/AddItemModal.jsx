@@ -23,8 +23,13 @@ const AddItemModal = ({ onClose, onAddItem }) => {
       console.log("Name:", name);
       console.log("Weather:", weather);
       console.log("Image URL:", imageUrl);
-      onAddItem(newItem);
-      onClose();
+      onAddItem(newItem)
+        .then(() => {
+          onClose();
+        })
+        .catch((error) => {
+          console.error("Error adding item:", error);
+        });
     }
   };
 

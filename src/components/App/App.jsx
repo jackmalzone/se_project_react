@@ -49,14 +49,15 @@ function App() {
 
   const handleAddItem = (item) => {
     console.log("Adding item in App:", JSON.stringify(item, null, 2));
-    addItem(item)
+    return addItem(item)
       .then((newItem) => {
         console.log("New item added:", JSON.stringify(newItem, null, 2));
         setClothingItems((prevItems) => [newItem, ...prevItems]);
-        closeActiveModal();
+        return newItem;
       })
       .catch((error) => {
         console.error("Error adding item:", error);
+        throw error;
       });
   };
 
@@ -98,7 +99,7 @@ function App() {
   }, []);
 
   const handleDeleteItem = (id) => {
-    deleteItem(id)
+    return deleteItem(id)
       .then(() => {
         setClothingItems((prevItems) =>
           prevItems.filter((item) => item._id !== id)
@@ -106,6 +107,7 @@ function App() {
       })
       .catch((error) => {
         console.error("Error deleting item:", error);
+        throw error;
       });
   };
 
