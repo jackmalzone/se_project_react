@@ -42,7 +42,7 @@ const ModalWithForm = React.forwardRef(
     };
 
     return (
-      <div className={`modal ${isOpen ? "modal__opened" : ""}`} ref={ref}>
+      <div className={`modal ${isOpen ? "modal_opened" : ""}`} ref={ref}>
         <div className="modal__content">
           <h2 className="modal__title">{title}</h2>
           <button

@@ -48,7 +48,7 @@ function ItemModal({ onClose, card, onDeleteItem }) {
 
   return (
     <>
-      <div className={`modal modal_type_item ${isOpen ? "modal__opened" : ""}`}>
+      <div className={`modal modal_type_item ${isOpen ? "modal_opened" : ""}`}>
         <div className="modal__content modal__content_type_image">
           <button
             onClick={handleClose}

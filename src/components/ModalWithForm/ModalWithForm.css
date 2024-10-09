@@ -14,7 +14,7 @@
   z-index: 1000;
 }
 
-.modal__opened {
+.modal_opened {
   opacity: 1;
   visibility: visible;
   transition: visibility 0s, opacity 0.3s ease;
@@ -32,7 +32,7 @@
   transition: transform 0.3s ease;
 }
 
-.modal__opened .modal__content {
+.modal_opened .modal__content {
   transform: scale(1);
 }
 

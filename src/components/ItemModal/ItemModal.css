@@ -43,7 +43,7 @@
   transition: transform 0.3s ease;
 }
 
-.modal__opened .modal__content {
+.modal_opened .modal__content {
   transform: scale(1);
 }
 
