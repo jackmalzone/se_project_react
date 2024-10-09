@@ -7,14 +7,14 @@ function ItemModal({ onClose, card, onDeleteItem }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  useEffect(() => {
+    setIsOpen(true);
+  }, []);
+
   const handleClose = useCallback(() => {
     setIsOpen(false);
     setTimeout(onClose, 300);
   }, [onClose]);
-
-  useEffect(() => {
-    setIsOpen(true);
-  }, []);
 
   useEscape(handleClose);
 
@@ -48,7 +48,14 @@ function ItemModal({ onClose, card, onDeleteItem }) {
 
   return (
     <>
-      <div className={`modal modal_type_item ${isOpen ? "modal_opened" : ""}`}>
+      <div
+        className={`modal modal_type_item ${isOpen ? "modal_opened" : ""}`}
+        onClick={(e) => {
+          if (e.target.classList.contains("modal")) {
+            handleClose();
+          }
+        }}
+      >
         <div className="modal__content modal__content_type_image">
           <button
             onClick={handleClose}
