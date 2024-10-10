@@ -101,18 +101,6 @@
       "weather": "cold",
       "imageUrl": "https://media.istockphoto.com/id/1433183269/photo/vibrant-mexican-ponchos-for-sale-retail-display.webp?b=1&s=612x612&w=0&k=20&c=0bu_o0mOdfPCaJGcLPeQM0phwjgRgK_0THT6ZKiNgoE=",
       "_id": 20
-    },
-    {
-      "name": "Underwear",
-      "weather": "warm",
-      "imageUrl": "https://media.istockphoto.com/id/625387894/photo/back-view-short-casual-pants-on-wooden-background.webp?b=1&s=612x612&w=0&k=20&c=cDFLxOWf0M_0hFcnFUWsTLP8yKFFQVU5VTC4Rfsx7Kw=",
-      "_id": 21
-    },
-    {
-      "name": "Underwear",
-      "weather": "warm",
-      "imageUrl": "https://media.istockphoto.com/id/625387894/photo/back-view-short-casual-pants-on-wooden-background.webp?b=1&s=612x612&w=0&k=20&c=cDFLxOWf0M_0hFcnFUWsTLP8yKFFQVU5VTC4Rfsx7Kw=",
-      "_id": 22
     }
   ]
 }

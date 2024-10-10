@@ -103,14 +103,16 @@ function App() {
   }, []);
 
   const handleDeleteItem = (id) => {
-    const makeRequest = () => {
-      return deleteItem(id).then(() => {
-        setClothingItems((prevItems) =>
-          prevItems.filter((item) => item._id !== id)
-        );
-      });
-    };
-    handleSubmit(makeRequest);
+    return new Promise((resolve, reject) => {
+      deleteItem(id)
+        .then(() => {
+          setClothingItems((prevItems) =>
+            prevItems.filter((item) => item._id !== id)
+          );
+          resolve();
+        })
+        .catch(reject);
+    });
   };
 
   return (

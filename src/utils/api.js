@@ -7,15 +7,13 @@ function checkResponse(res) {
   return Promise.reject(`Error: ${res.status}`);
 }
 
-function request(url, options) {
+export function request(url, options) {
   return fetch(url, options).then(checkResponse);
 }
 
-function getItems() {
+export function getItems() {
   return request(`${baseUrl}/items`);
 }
-
-export { getItems };
 
 export const addItem = (item) => {
   console.log("Sending item to server:", JSON.stringify(item, null, 2));
@@ -25,9 +23,6 @@ export const addItem = (item) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(item),
-  }).then((data) => {
-    console.log("Server response:", JSON.stringify(data, null, 2));
-    return data;
   });
 };
 

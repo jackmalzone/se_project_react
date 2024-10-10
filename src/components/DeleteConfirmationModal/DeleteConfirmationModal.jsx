@@ -3,10 +3,10 @@ import { useOverlayClick } from "../../hooks/useOverlayClick";
 import "./DeleteConfirmationModal.css";
 
 function DeleteConfirmationModal({ isOpen, onClose, onConfirm }) {
-  if (!isOpen) return null;
-
   const modalRef = useRef(null);
   useOverlayClick(modalRef, onClose);
+
+  if (!isOpen) return null;
 
   return (
     <div className="delete-modal" ref={modalRef}>
