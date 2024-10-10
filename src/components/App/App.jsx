@@ -55,11 +55,11 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
-  const handleAddItem = (item) => {
+  const handleAddItem = (item, resetForm) => {
     const makeRequest = () => {
       return addItem(item).then((newItem) => {
         setClothingItems((prevItems) => [newItem, ...prevItems]);
-        return newItem;
+        resetForm();
       });
     };
     handleSubmit(makeRequest);

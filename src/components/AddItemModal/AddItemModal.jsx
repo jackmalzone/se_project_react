@@ -12,26 +12,8 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValid) {
-      const newItem = {
-        name: values.name,
-        weather: values.weather,
-        imageUrl: values.imageUrl,
-      };
-      const result = onAddItem(newItem);
-      if (result && typeof result.then === "function") {
-        result
-          .then(() => {
-            onClose();
-            resetForm();
-          })
-          .catch((error) => {
-            console.error("Error adding item:", error);
-          });
-      } else {
-        console.log("Item added successfully");
-        onClose();
-        resetForm();
-      }
+      onAddItem(values, resetForm);
+      onClose();
     }
   };
 
