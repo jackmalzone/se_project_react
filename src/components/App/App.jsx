@@ -47,22 +47,22 @@ function App() {
     setCurrentTemperatureUnit((prevUnit) => (prevUnit === "F" ? "C" : "F"));
   };
 
-  const handleAddItem = (item) => {
-    console.log("Adding item in App:", JSON.stringify(item, null, 2));
+  const handleSubmit = (request) => {
     setIsLoading(true);
-    return addItem(item)
-      .then((newItem) => {
-        console.log("New item added:", JSON.stringify(newItem, null, 2));
+    request()
+      .then(closeActiveModal)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleAddItem = (item) => {
+    const makeRequest = () => {
+      return addItem(item).then((newItem) => {
         setClothingItems((prevItems) => [newItem, ...prevItems]);
         return newItem;
-      })
-      .catch((error) => {
-        console.error("Error adding item:", error);
-        throw error;
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   console.log("App rendering, activeModal:", activeModal);
@@ -103,20 +103,14 @@ function App() {
   }, []);
 
   const handleDeleteItem = (id) => {
-    setIsLoading(true);
-    return deleteItem(id)
-      .then(() => {
+    const makeRequest = () => {
+      return deleteItem(id).then(() => {
         setClothingItems((prevItems) =>
           prevItems.filter((item) => item._id !== id)
         );
-      })
-      .catch((error) => {
-        console.error("Error deleting item:", error);
-        throw error;
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   return (

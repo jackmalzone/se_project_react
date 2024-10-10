@@ -61,7 +61,7 @@
 
 .modal_type_item .modal__image {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
   object-position: center;
   box-sizing: border-box;

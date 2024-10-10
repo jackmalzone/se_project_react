@@ -17,14 +17,21 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
         weather: values.weather,
         imageUrl: values.imageUrl,
       };
-      onAddItem(newItem)
-        .then(() => {
-          onClose();
-          resetForm();
-        })
-        .catch((error) => {
-          console.error("Error adding item:", error);
-        });
+      const result = onAddItem(newItem);
+      if (result && typeof result.then === "function") {
+        result
+          .then(() => {
+            onClose();
+            resetForm();
+          })
+          .catch((error) => {
+            console.error("Error adding item:", error);
+          });
+      } else {
+        console.log("Item added successfully");
+        onClose();
+        resetForm();
+      }
     }
   };
 
