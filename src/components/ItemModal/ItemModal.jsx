@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import "./ItemModal.css";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { useEscape } from "../../hooks/useEscape";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 
 function ItemModal({ onClose, card, onDeleteItem }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     setIsOpen(true);
@@ -17,6 +19,7 @@ function ItemModal({ onClose, card, onDeleteItem }) {
   }, [onClose]);
 
   useEscape(handleClose);
+  useOverlayClick(modalRef, handleClose);
 
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
@@ -32,29 +35,11 @@ function ItemModal({ onClose, card, onDeleteItem }) {
       });
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (e.target.classList.contains("modal")) {
-        handleClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [handleClose]);
-
   return (
     <>
       <div
         className={`modal modal_type_item ${isOpen ? "modal_opened" : ""}`}
-        onClick={(e) => {
-          if (e.target.classList.contains("modal")) {
-            handleClose();
-          }
-        }}
+        ref={modalRef}
       >
         <div className="modal__content modal__content_type_image">
           <button

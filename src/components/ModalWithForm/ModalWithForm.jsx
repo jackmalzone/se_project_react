@@ -1,6 +1,7 @@
 import "./ModalWithForm.css";
 import React, { useEffect, useState, useCallback } from "react";
 import { useEscape } from "../../hooks/useEscape";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 
 const ModalWithForm = React.forwardRef(
   (
@@ -20,22 +21,7 @@ const ModalWithForm = React.forwardRef(
 
     useEscape(handleClose);
 
-    useEffect(() => {
-      const handleMouseDown = (e) => {
-        if (e.target.classList.contains("modal")) {
-          handleClose();
-        }
-      };
-
-      const modal = ref.current;
-      if (modal) {
-        modal.addEventListener("mousedown", handleMouseDown);
-
-        return () => {
-          modal.removeEventListener("mousedown", handleMouseDown);
-        };
-      }
-    }, [handleClose, ref]);
+    useOverlayClick(ref, handleClose);
 
     const handleSubmit = (e) => {
       e.preventDefault();

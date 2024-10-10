@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 import "./DeleteConfirmationModal.css";
 
 function DeleteConfirmationModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
+  const modalRef = useRef(null);
+  useOverlayClick(modalRef, onClose);
+
   return (
-    <div className="delete-modal">
+    <div className="delete-modal" ref={modalRef}>
       <div className="delete-modal__content">
         <button
           onClick={onClose}
