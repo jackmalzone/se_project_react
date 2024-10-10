@@ -1,5 +1,6 @@
 import "./ModalWithForm.css";
 import React, { useEffect, useState, useCallback } from "react";
+import { useEscape } from "../../hooks/useEscape";
 
 const ModalWithForm = React.forwardRef(
   (
@@ -16,6 +17,8 @@ const ModalWithForm = React.forwardRef(
       setIsOpen(false);
       setTimeout(onClose, 300);
     }, [onClose]);
+
+    useEscape(handleClose);
 
     useEffect(() => {
       const handleMouseDown = (e) => {

@@ -1,18 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import "./AddItemModal.css";
 import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
-import { useEscape } from "../../hooks/useEscape";
 
 const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
-  console.log("AddItemModal rendered");
-
   const modalRef = useRef(null);
   const { values, handleChange, errors, isValid, resetForm } =
     useFormAndValidation();
-
-  useEscape(onClose);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +17,6 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
         weather: values.weather,
         imageUrl: values.imageUrl,
       };
-      console.log("Submitting new item:", newItem);
       onAddItem(newItem)
         .then(() => {
           onClose();
@@ -34,20 +28,13 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("AddItemModal mounted");
-    return () => {
-      console.log("AddItemModal unmounted");
-    };
-  }, []);
-
   return (
     <ModalWithForm
       title="New Garment"
       onClose={onClose}
       onSubmit={handleSubmit}
       ref={modalRef}
-      buttonText="Add garment"
+      buttonText={isLoading ? "Saving..." : "Add garment"}
       isValid={isValid}
       isLoading={isLoading}
     >
