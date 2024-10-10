@@ -50,7 +50,9 @@ function App() {
   const handleSubmit = (request) => {
     setIsLoading(true);
     request()
-      .then(closeActiveModal)
+      .then(() => {
+        closeActiveModal();
+      })
       .catch(console.error)
       .finally(() => setIsLoading(false));
   };
@@ -60,6 +62,7 @@ function App() {
       return addItem(item).then((newItem) => {
         setClothingItems((prevItems) => [newItem, ...prevItems]);
         resetForm();
+        return newItem;
       });
     };
     handleSubmit(makeRequest);

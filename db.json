@@ -101,6 +101,12 @@
       "weather": "cold",
       "imageUrl": "https://media.istockphoto.com/id/1433183269/photo/vibrant-mexican-ponchos-for-sale-retail-display.webp?b=1&s=612x612&w=0&k=20&c=0bu_o0mOdfPCaJGcLPeQM0phwjgRgK_0THT6ZKiNgoE=",
       "_id": 20
+    },
+    {
+      "name": "Socks",
+      "imageUrl": "https://images.freeimages.com/images/large-previews/43e/autumn-socks-1151694.jpg?fmt=webp&w=500",
+      "weather": "warm",
+      "_id": 21
     }
   ]
 }

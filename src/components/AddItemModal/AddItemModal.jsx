@@ -13,7 +13,6 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
     e.preventDefault();
     if (isValid) {
       onAddItem(values, resetForm);
-      onClose();
     }
   };
 
