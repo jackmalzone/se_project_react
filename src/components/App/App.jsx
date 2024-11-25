@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 import "../../utils/index.css";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -11,7 +12,15 @@ import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
-import { getItems, addItem, deleteItem } from "../../utils/api";
+import {
+  getItems,
+  addItem,
+  deleteItem,
+  addCardLike,
+  removeCardLike,
+} from "../../utils/api";
+import EditProfileModal from "../EditProfileModal/EditProfileModal";
+import { updateProfile } from "../../utils/auth";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -26,6 +35,7 @@ function App() {
   const [userName, setUserName] = useState("");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -66,6 +76,40 @@ function App() {
       });
     };
     handleSubmit(makeRequest);
+  };
+
+  const handleEditProfile = () => {
+    setActiveModal("edit-profile");
+  };
+
+  const handleUpdateUser = ({ name, avatar }) => {
+    const token = localStorage.getItem("jwt");
+    if (!token) return;
+
+    setIsLoading(true);
+    updateProfile({ name, avatar }, token)
+      .then((userData) => {
+        setUserName(userData.name);
+        setUserAvatar(userData.avatar);
+        closeActiveModal();
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleCardLike = ({ id, isLiked }) => {
+    const token = localStorage.getItem("jwt");
+    if (!token) return;
+
+    const likeRequest = isLiked ? removeCardLike : addCardLike;
+
+    likeRequest(id, token)
+      .then((updatedCard) => {
+        setClothingItems((cards) =>
+          cards.map((item) => (item._id === id ? updatedCard : item))
+        );
+      })
+      .catch(console.error);
   };
 
   console.log("App rendering, activeModal:", activeModal);
@@ -118,63 +162,87 @@ function App() {
     });
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    setUserName("");
+    setUserAvatar(null);
+  };
+
   return (
-    <CurrentTempUnitContext.Provider
-      value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+    <CurrentUserContext.Provider
+      value={{
+        currentUser: { _id: "", name: userName, avatar: userAvatar },
+        isLoggedIn,
+      }}
     >
-      <div className="page">
-        <div className="page__content">
-          <Header
-            handleAddButtonClick={handleAddButtonClick}
-            weatherData={weatherData}
-            avatar={userAvatar}
-            username={userName}
-          />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Main
-                  weatherData={weatherData}
-                  handleCardClick={handleCardClick}
-                  clothingItems={clothingItems}
-                  isLoading={isLoading}
-                />
-              }
+      <CurrentTempUnitContext.Provider
+        value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+      >
+        <div className="page">
+          <div className="page__content">
+            <Header
+              handleAddButtonClick={handleAddButtonClick}
+              weatherData={weatherData}
+              avatar={userAvatar}
+              username={userName}
             />
-            <Route
-              path="/profile"
-              element={
-                <Profile
-                  onCardClick={handleCardClick}
-                  clothingItems={clothingItems}
-                  onDeleteItem={handleDeleteItem}
-                  onAddNewClick={handleAddButtonClick}
-                  username={userName}
-                  avatar={userAvatar}
-                />
-              }
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Main
+                    weatherData={weatherData}
+                    handleCardClick={handleCardClick}
+                    clothingItems={clothingItems}
+                    isLoading={isLoading}
+                    onCardLike={handleCardLike}
+                  />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <Profile
+                    onCardClick={handleCardClick}
+                    clothingItems={clothingItems}
+                    onDeleteItem={handleDeleteItem}
+                    onAddNewClick={handleAddButtonClick}
+                    username={userName}
+                    avatar={userAvatar}
+                    onEditProfile={handleEditProfile}
+                    onSignOut={handleSignOut}
+                  />
+                }
+              />
+            </Routes>
+            <Footer />
+          </div>
+          {activeModal === "add-garment" && (
+            <AddItemModal
+              onClose={closeActiveModal}
+              onAddItem={handleAddItem}
+              isLoading={isLoading}
             />
-          </Routes>
-          <Footer />
+          )}
+          {activeModal === "preview" && (
+            <ItemModal
+              card={selectedCard}
+              onClose={closeActiveModal}
+              onDeleteItem={handleDeleteItem}
+              isLoading={isLoading}
+            />
+          )}
+          {activeModal === "edit-profile" && (
+            <EditProfileModal
+              onClose={closeActiveModal}
+              onUpdateUser={handleUpdateUser}
+              isLoading={isLoading}
+            />
+          )}
         </div>
-        {activeModal === "add-garment" && (
-          <AddItemModal
-            onClose={closeActiveModal}
-            onAddItem={handleAddItem}
-            isLoading={isLoading}
-          />
-        )}
-        {activeModal === "preview" && (
-          <ItemModal
-            card={selectedCard}
-            onClose={closeActiveModal}
-            onDeleteItem={handleDeleteItem}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
-    </CurrentTempUnitContext.Provider>
+      </CurrentTempUnitContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 

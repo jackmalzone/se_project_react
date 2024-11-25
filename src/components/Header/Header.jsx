@@ -1,19 +1,18 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import headerLogo from "../../assets/logo.svg";
 import avatarDefault from "../../assets/avatar-placeholder.png";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function Header({ handleAddButtonClick, weatherData, avatar, username }) {
+function Header({ handleAddButtonClick, weatherData }) {
+  const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
+
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
-
-  const onAddButtonClick = () => {
-    console.log("Add Clothes button clicked");
-    handleAddButtonClick();
-  };
 
   return (
     <header className="header">
@@ -23,33 +22,45 @@ function Header({ handleAddButtonClick, weatherData, avatar, username }) {
       <p className="header__spacetime">{`${currentDate}, ${
         weatherData.city || "Loading..."
       }`}</p>
-      <div className="header__controls">
-        <ToggleSwitch className="header__toggle-switch" />
-        <button
-          onClick={onAddButtonClick}
-          type="button"
-          className="header__button-add-clothes"
-          aria-label="Add new clothes"
-        >
-          + Add Clothes
-        </button>
-      </div>
-      <Link to="/profile" className="header__profile-link">
-        <div className="header__profile">
-          <p className="header__username">{username || "Username"}</p>
-          {avatar ? (
-            <img
-              className="header__avatar"
-              src={avatar || avatarDefault}
-              alt="avatar"
-            />
-          ) : (
-            <span className="header__avatar header__avatar_none">
-              {username?.toUpperCase().charAt(0) || "U"}
-            </span>
-          )}
+      {isLoggedIn ? (
+        <>
+          <div className="header__controls">
+            <ToggleSwitch className="header__toggle-switch" />
+            <button
+              onClick={handleAddButtonClick}
+              type="button"
+              className="header__button-add-clothes"
+            >
+              + Add Clothes
+            </button>
+          </div>
+          <Link to="/profile" className="header__profile-link">
+            <div className="header__profile">
+              <p className="header__username">{currentUser.name}</p>
+              {currentUser.avatar ? (
+                <img
+                  className="header__avatar"
+                  src={currentUser.avatar}
+                  alt="avatar"
+                />
+              ) : (
+                <span className="header__avatar header__avatar_none">
+                  {currentUser.name?.toUpperCase().charAt(0) || "U"}
+                </span>
+              )}
+            </div>
+          </Link>
+        </>
+      ) : (
+        <div className="header__auth-buttons">
+          <Link to="/login" className="header__button">
+            Log in
+          </Link>
+          <Link to="/signup" className="header__button">
+            Sign up
+          </Link>
         </div>
-      </Link>
+      )}
     </header>
   );
 }

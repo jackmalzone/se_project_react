@@ -7,6 +7,8 @@ function Profile({
   clothingItems,
   onDeleteItem,
   onAddNewClick,
+  onEditProfile,
+  onSignOut,
   username,
   avatar,
 }) {
@@ -14,7 +16,12 @@ function Profile({
     <div className="profile">
       <div className="profile__content">
         <section className="profile__sidebar">
-          <SideBar username={username} avatar={avatar} />
+          <SideBar
+            username={username}
+            avatar={avatar}
+            onEditProfile={onEditProfile}
+            onSignOut={onSignOut}
+          />
         </section>
         <section className="profile__clothing-items">
           <ClothesSection

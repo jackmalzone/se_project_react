@@ -1,17 +1,34 @@
 import "./SideBar.css";
 import avatarDefault from "../../assets/avatar-placeholder.png";
 
-function SideBar({ username, avatar }) {
+function SideBar({ username, avatar, onEditProfile, onSignOut }) {
   return (
     <div className="sidebar">
-      {avatar ? (
-        <img src={avatar} alt="Avatar" className="sidebar__avatar" />
-      ) : (
-        <div className="sidebar__avatar sidebar__avatar_none">
-          {username?.toUpperCase().charAt(0) || "U"}
-        </div>
-      )}
-      <p className="sidebar__username">{username || "Username"}</p>
+      <div className="sidebar__user-info">
+        {avatar ? (
+          <img
+            src={avatar}
+            alt={`${username}'s avatar`}
+            className="sidebar__avatar"
+          />
+        ) : (
+          <div className="sidebar__avatar sidebar__avatar_placeholder">
+            {username?.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <p className="sidebar__username">{username}</p>
+      </div>
+      <div className="sidebar__buttons">
+        <button className="sidebar__button" onClick={onEditProfile}>
+          Edit Profile
+        </button>
+        <button
+          className="sidebar__button sidebar__button_type_logout"
+          onClick={onSignOut}
+        >
+          Sign Out
+        </button>
+      </div>
     </div>
   );
 }

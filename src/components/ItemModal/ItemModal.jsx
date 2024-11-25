@@ -1,10 +1,24 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import "./ItemModal.css";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { useEscape } from "../../hooks/useEscape";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function ItemModal({ onClose, card, onDeleteItem }) {
+function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
+  const { currentUser } = useContext(CurrentUserContext);
+  const isOwn = card.owner === currentUser._id;
+
+  const itemDeleteButtonClassName = `item__delete-button ${
+    isOwn ? "item__delete-button_visible" : "item__delete-button_hidden"
+  }`;
+
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const modalRef = useRef(null);
@@ -59,8 +73,9 @@ function ItemModal({ onClose, card, onDeleteItem }) {
               <p className="modal__weather">Weather: {card.weather}</p>
             </div>
             <button
-              className="modal__delete-button"
+              className={itemDeleteButtonClassName}
               onClick={handleDeleteClick}
+              disabled={isLoading}
             >
               Delete item
             </button>

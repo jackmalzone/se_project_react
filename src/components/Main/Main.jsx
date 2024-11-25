@@ -6,7 +6,13 @@ import ItemCard from "../ItemCard/ItemCard";
 import TemperatureDisplay from "../TemperatureDisplay/TemperatureDisplay";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 
-function Main({ weatherData, handleCardClick, clothingItems, isLoading }) {
+function Main({
+  weatherData,
+  handleCardClick,
+  clothingItems,
+  isLoading,
+  onCardLike,
+}) {
   const { currentTemperatureUnit } = useContext(CurrentTempUnitContext);
 
   if (isLoading) {
@@ -35,6 +41,7 @@ function Main({ weatherData, handleCardClick, clothingItems, isLoading }) {
                 }
                 item={item}
                 onCardClick={handleCardClick}
+                onCardLike={onCardLike}
               />
             ))}
         </ul>

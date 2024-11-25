@@ -33,3 +33,28 @@
 .sidebar__avatar .sidebar__avatar_none {
   text-decoration: none;
 }
+
+.sidebar__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.sidebar__button {
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.sidebar__button:hover {
+  opacity: 0.6;
+}
+
+.sidebar__button_type_logout {
+  color: #ff0000;
+  border-color: #ff0000;
+}
