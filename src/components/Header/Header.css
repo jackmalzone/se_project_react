@@ -23,6 +23,14 @@
   margin-right: 20px;
 }
 
+.header__button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
 .header__button-add-clothes {
   cursor: pointer;
   border: none;

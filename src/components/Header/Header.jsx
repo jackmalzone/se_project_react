@@ -49,20 +49,22 @@ function Header({
                   alt="avatar"
                 />
               ) : (
-                <span className="header__avatar header__avatar_none">
-                  {currentUser.name?.toUpperCase().charAt(0) || "U"}
-                </span>
+                <img
+                  className="header__avatar"
+                  src={avatarDefault}
+                  alt="default avatar"
+                />
               )}
             </div>
           </Link>
         </>
       ) : (
         <div className="header__auth-buttons">
-          <button onClick={onLoginClick} className="header__button">
-            Log in
-          </button>
           <button onClick={onRegisterClick} className="header__button">
-            Sign up
+            Sign Up
+          </button>
+          <button onClick={onLoginClick} className="header__button">
+            Log In
           </button>
         </div>
       )}

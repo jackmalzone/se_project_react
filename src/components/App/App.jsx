@@ -23,6 +23,7 @@ import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import { updateProfile, login, register } from "../../utils/auth";
 import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
+import avatarDefault from "../../assets/avatar-placeholder.png";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -191,24 +192,49 @@ function App() {
 
   const handleRegister = (data) => {
     setIsLoading(true);
-    register(data)
+
+    // Create registration data without avatar if none provided
+    const registrationData = {
+      name: data.name || "",
+      email: data.email || "",
+      password: data.password || "",
+    };
+
+    // Only add avatar if one was provided by user
+    if (data.avatar) {
+      registrationData.avatar = data.avatar;
+    }
+
+    console.log("2. Processed registration data:", registrationData);
+
+    register(registrationData)
       .then((res) => {
-        if (res) {
-          return login({ email: data.email, password: data.password });
+        console.log("3. Registration API response:", res);
+        if (res && res._id) {
+          return login({
+            email: data.email,
+            password: data.password,
+          });
         }
+        return Promise.reject("Registration failed - no user ID returned");
       })
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
+      .then((loginRes) => {
+        console.log("5. Login response:", loginRes);
+        if (loginRes && loginRes.token) {
+          localStorage.setItem("jwt", loginRes.token);
           setIsLoggedIn(true);
-          setUserName(res.name);
-          setUserAvatar(res.avatar);
+          setUserName(loginRes.name || data.name);
+          setUserAvatar(loginRes.avatar); // Let the backend handle default avatar
           closeActiveModal();
           navigate("/");
         }
       })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+      .catch((error) => {
+        console.error("Registration/Login error details:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleLoginClick = () => {

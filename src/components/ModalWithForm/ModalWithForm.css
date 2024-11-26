@@ -73,6 +73,7 @@
   border-bottom: 1px solid #000000;
   outline: none;
   margin: 8px 0 24px;
+  transition: border-color 0.3s ease;
 }
 
 .modal__radio-input {
@@ -81,6 +82,24 @@
 
 .modal__input::placeholder {
   color: rgba(0, 0, 0, 0.5);
+  transition: color 0.3s ease;
+}
+
+.modal__input_error::placeholder {
+  color: rgba(255, 77, 0, 0.5);
+}
+
+.modal__input_error {
+  border-bottom: 1px solid #ff4d00;
+}
+
+.modal__required {
+  margin-left: 2px;
+  color: #000;
+}
+
+.modal__required_error {
+  color: #ff4d00;
 }
 
 .modal__radio-buttons {
@@ -138,7 +157,7 @@
   display: block;
 }
 
-.modal__input:invalid {
+.modal__input_touched:invalid {
   border-bottom: 1px solid #ff4d00;
 }
 
@@ -161,4 +180,14 @@
 
 .modal__label:last-of-type {
   margin-bottom: 32px;
+}
+.modal__label {
+  display: block;
+  margin-bottom: 8px;
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.modal__label_error {
+  color: #ff4d00;
 }
