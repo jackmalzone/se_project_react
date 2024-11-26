@@ -1,0 +1,52 @@
+.modal__content_type_profile {
+  width: 100%;
+  max-width: 496px;
+  padding: 28px;
+  background-color: #fff;
+  border-radius: 20px;
+  position: relative;
+}
+
+.modal__label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.modal__input {
+  width: 100%;
+  margin-bottom: 24px;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.modal__input:last-of-type {
+  margin-bottom: 32px;
+}
+
+.modal__button {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.modal__button:hover {
+  opacity: 0.8;
+}
+
+.modal__button:disabled {
+  background-color: #808080;
+  cursor: not-allowed;
+}

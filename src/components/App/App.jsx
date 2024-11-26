@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import "../../utils/index.css";
@@ -20,7 +20,9 @@ import {
   removeCardLike,
 } from "../../utils/api";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
-import { updateProfile } from "../../utils/auth";
+import { updateProfile, login, register } from "../../utils/auth";
+import LoginModal from "../LoginModal/LoginModal";
+import RegisterModal from "../RegisterModal/RegisterModal";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -36,6 +38,7 @@ function App() {
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -169,6 +172,53 @@ function App() {
     setUserAvatar(null);
   };
 
+  const handleLogin = (data) => {
+    setIsLoading(true);
+    login(data)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setIsLoggedIn(true);
+          setUserName(res.name);
+          setUserAvatar(res.avatar);
+          closeActiveModal();
+          navigate("/");
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleRegister = (data) => {
+    setIsLoading(true);
+    register(data)
+      .then((res) => {
+        if (res) {
+          return login({ email: data.email, password: data.password });
+        }
+      })
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setIsLoggedIn(true);
+          setUserName(res.name);
+          setUserAvatar(res.avatar);
+          closeActiveModal();
+          navigate("/");
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleLoginClick = () => {
+    setActiveModal("login");
+  };
+
+  const handleRegisterClick = () => {
+    setActiveModal("register");
+  };
+
   return (
     <CurrentUserContext.Provider
       value={{
@@ -184,8 +234,8 @@ function App() {
             <Header
               handleAddButtonClick={handleAddButtonClick}
               weatherData={weatherData}
-              avatar={userAvatar}
-              username={userName}
+              onLoginClick={handleLoginClick}
+              onRegisterClick={handleRegisterClick}
             />
             <Routes>
               <Route
@@ -215,6 +265,27 @@ function App() {
                   />
                 }
               />
+              <Route
+                path="/login"
+                element={
+                  <LoginModal
+                    onClose={() => navigate("/")}
+                    onLogin={handleLogin}
+                    isLoading={isLoading}
+                    onRegisterClick={handleRegisterClick}
+                  />
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <RegisterModal
+                    onClose={() => navigate("/")}
+                    onRegister={handleRegister}
+                    isLoading={isLoading}
+                  />
+                }
+              />
             </Routes>
             <Footer />
           </div>
@@ -237,6 +308,21 @@ function App() {
             <EditProfileModal
               onClose={closeActiveModal}
               onUpdateUser={handleUpdateUser}
+              isLoading={isLoading}
+            />
+          )}
+          {activeModal === "login" && (
+            <LoginModal
+              onClose={closeActiveModal}
+              onLogin={handleLogin}
+              isLoading={isLoading}
+              onRegisterClick={handleRegisterClick}
+            />
+          )}
+          {activeModal === "register" && (
+            <RegisterModal
+              onClose={closeActiveModal}
+              onRegister={handleRegister}
               isLoading={isLoading}
             />
           )}

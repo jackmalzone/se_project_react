@@ -26,9 +26,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Signing up..." : "Sign up"}
     >
-      <label>
+      <label className="modal__label">
         Email*
         <input
+          className="modal__input"
           type="email"
           name="email"
           value={formData.email}
@@ -37,9 +38,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
           required
         />
       </label>
-      <label>
+      <label className="modal__label">
         Password*
         <input
+          className="modal__input"
           type="password"
           name="password"
           value={formData.password}
@@ -48,9 +50,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
           required
         />
       </label>
-      <label>
+      <label className="modal__label">
         Name
         <input
+          className="modal__input"
           type="text"
           name="name"
           value={formData.name}
@@ -58,9 +61,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
           placeholder="Name"
         />
       </label>
-      <label>
+      <label className="modal__label">
         Avatar URL
         <input
+          className="modal__input"
           type="url"
           name="avatar"
           value={formData.avatar}

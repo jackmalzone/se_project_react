@@ -1,0 +1,43 @@
+.modal__label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.modal__label:last-of-type {
+  margin-bottom: 32px;
+}
+
+.modal__input {
+  margin-top: 8px;
+  /* display: block; */
+  width: 100%;
+}
+
+.modal__footer {
+  text-align: center;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal__text {
+  color: #000;
+  font-size: 14px;
+}
+
+.modal__link {
+  background: none;
+  border: none;
+  color: #000;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+.modal__link:hover {
+  opacity: 0.6;
+}

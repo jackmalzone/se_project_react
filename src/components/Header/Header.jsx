@@ -6,7 +6,12 @@ import avatarDefault from "../../assets/avatar-placeholder.png";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function Header({ handleAddButtonClick, weatherData }) {
+function Header({
+  handleAddButtonClick,
+  weatherData,
+  onLoginClick,
+  onRegisterClick,
+}) {
   const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
 
   const currentDate = new Date().toLocaleString("default", {
@@ -53,12 +58,12 @@ function Header({ handleAddButtonClick, weatherData }) {
         </>
       ) : (
         <div className="header__auth-buttons">
-          <Link to="/login" className="header__button">
+          <button onClick={onLoginClick} className="header__button">
             Log in
-          </Link>
-          <Link to="/signup" className="header__button">
+          </button>
+          <button onClick={onRegisterClick} className="header__button">
             Sign up
-          </Link>
+          </button>
         </div>
       )}
     </header>
