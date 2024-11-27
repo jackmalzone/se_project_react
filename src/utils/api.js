@@ -12,7 +12,24 @@ export function request(url, options) {
 }
 
 export function getItems() {
-  return request(`${baseUrl}/items`);
+  const token = localStorage.getItem("jwt");
+  console.log("Fetching items with token:", token ? "Present" : "Missing");
+
+  return request(`${baseUrl}/items`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { authorization: `Bearer ${token}` }),
+    },
+  })
+    .then((data) => {
+      console.log("Server response for items:", data);
+      console.log("Full item data from server:", JSON.stringify(data, null, 2));
+      return data;
+    })
+    .catch((error) => {
+      console.error("Server error fetching items:", error);
+      throw error;
+    });
 }
 
 export const addItem = (item) => {

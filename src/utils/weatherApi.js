@@ -23,5 +23,12 @@ export const isDay = ({ sunrise, sunset }, now = Date.now()) => {
 };
 
 export const getWeatherType = (temperature) => {
-  return temperature <= 65 ? "cold" : temperature <= 85 ? "warm" : "hot";
+  const type = temperature <= 65 ? "cold" : temperature <= 85 ? "warm" : "hot";
+  console.log(
+    "Calculated weather type:",
+    type,
+    "for temperature:",
+    temperature
+  );
+  return type.toLowerCase();
 };

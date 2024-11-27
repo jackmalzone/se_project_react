@@ -15,6 +15,13 @@ function Main({
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTempUnitContext);
 
+  console.log("Main component - weatherData.type:", weatherData.type);
+  console.log("Main component - clothingItems:", clothingItems);
+  console.log(
+    "Main component - filtered items:",
+    clothingItems.filter((item) => item.weather === weatherData.type)
+  );
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -33,12 +40,20 @@ function Main({
         </p>
         <ul className="cards__list">
           {clothingItems
-            .filter((item) => item.weather === weatherData.type)
+            .filter((item) => {
+              const itemWeather = item.weather?.toLowerCase();
+              const currentWeather = weatherData.type?.toLowerCase();
+              console.log("Filtering item:", {
+                name: item.name,
+                itemWeather,
+                currentWeather,
+                matches: itemWeather === currentWeather,
+              });
+              return itemWeather === currentWeather;
+            })
             .map((item) => (
               <ItemCard
-                key={
-                  item._id || item.id || Math.random().toString(36).substr(2, 9)
-                }
+                key={item._id}
                 item={item}
                 onCardClick={handleCardClick}
                 onCardLike={onCardLike}

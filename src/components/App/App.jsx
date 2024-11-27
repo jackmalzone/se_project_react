@@ -140,16 +140,18 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("Fetching clothing items...");
     getItems()
       .then((data) => {
-        console.log(data);
-        setClothingItems(data);
+        console.log("Received clothing items:", data);
+        if (Array.isArray(data)) {
+          setClothingItems(data);
+        } else {
+          console.error("Received non-array data:", data);
+        }
       })
       .catch((error) => {
         console.error("Failed to fetch items:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   }, []);
 
@@ -192,24 +194,8 @@ function App() {
 
   const handleRegister = (data) => {
     setIsLoading(true);
-
-    // Create registration data without avatar if none provided
-    const registrationData = {
-      name: data.name || "",
-      email: data.email || "",
-      password: data.password || "",
-    };
-
-    // Only add avatar if one was provided by user
-    if (data.avatar) {
-      registrationData.avatar = data.avatar;
-    }
-
-    console.log("2. Processed registration data:", registrationData);
-
-    register(registrationData)
+    register(data)
       .then((res) => {
-        console.log("3. Registration API response:", res);
         if (res && res._id) {
           return login({
             email: data.email,
@@ -219,12 +205,11 @@ function App() {
         return Promise.reject("Registration failed - no user ID returned");
       })
       .then((loginRes) => {
-        console.log("5. Login response:", loginRes);
         if (loginRes && loginRes.token) {
           localStorage.setItem("jwt", loginRes.token);
           setIsLoggedIn(true);
-          setUserName(loginRes.name || data.name);
-          setUserAvatar(loginRes.avatar); // Let the backend handle default avatar
+          setUserName(loginRes.name);
+          setUserAvatar(loginRes.avatar);
           closeActiveModal();
           navigate("/");
         }

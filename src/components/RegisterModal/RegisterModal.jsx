@@ -4,7 +4,12 @@ import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 
 const RegisterModal = ({ onClose, onRegister, isLoading }) => {
-  const { values, handleChange, errors, isValid } = useFormAndValidation();
+  const { values, handleChange, errors, isValid } = useFormAndValidation({
+    email: "",
+    password: "",
+    name: "",
+    avatar: "",
+  });
   const [touched, setTouched] = useState({
     email: false,
     password: false,
@@ -19,7 +24,14 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("RegisterModal - Form values:", values);
+    console.log("RegisterModal - Form values detail:", {
+      email: values.email || "missing",
+      name: values.name || "missing",
+      password: values.password || "missing",
+      avatar: values.avatar || "missing",
+      isValid,
+      errors,
+    });
     onRegister(values);
   };
 
@@ -66,6 +78,7 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
         placeholder="Name"
         touched={touched.name}
         error={errors.name}
+        required
       />
       <Input
         label="Avatar URL"

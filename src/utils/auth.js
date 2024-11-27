@@ -1,35 +1,28 @@
 const BASE_URL = "http://localhost:3001";
 
 export const register = ({ name, avatar, email, password }) => {
-  console.log("Sending registration request to:", `${BASE_URL}/signup`);
-  console.log("Registration payload:", {
-    name,
-    avatar,
-    email,
-    password: "***",
-  });
+  console.log("1. Registration attempt:", { name, email, hasAvatar: !!avatar });
 
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json",
     },
-    body: JSON.stringify({ name, avatar, email, password }),
-  })
-    .then(async (res) => {
-      const data = await res.json();
-      console.log("Server response:", { status: res.status, data });
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      ...(avatar?.trim() && { avatar: avatar.trim() }),
+    }),
+  }).then(async (res) => {
+    const data = await res.json();
+    console.log("2. Server response:", { status: res.status, data });
 
-      if (res.ok) {
-        return data;
-      }
-      throw new Error(data.message || `Error: ${res.status}`);
-    })
-    .catch((err) => {
-      console.error("Registration request failed:", err);
-      throw err;
-    });
+    if (!res.ok) {
+      throw new Error(data.error || data.message || `Error: ${res.status}`);
+    }
+    return data;
+  });
 };
 
 export const login = ({ email, password }) => {

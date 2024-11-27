@@ -1,0 +1,145 @@
+const items = [
+  {
+    name: "Boot",
+    weather: "cold",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Boot.png",
+  },
+  {
+    name: "Cap",
+    weather: "hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Cap.png",
+  },
+  {
+    _id: 3,
+    name: "Coat",
+    weather: "cold",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Coat.png?etag=298717ed89d5e40b1954a1831ae0bdd4",
+  },
+  {
+    _id: 4,
+    name: "Dress",
+    weather: "hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Dress.png?etag=1f9cd32a311ab139cab43494883720bf",
+  },
+  {
+    _id: 5,
+    name: "Hoodie",
+    weather: "cold",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Hoodie.png?etag=5f52451d0958ccb1016c78a45603a4e8",
+  },
+  {
+    _id: 6,
+    name: "Jacket",
+    weather: "cold",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Jacket.png?etag=f4bb188deaa25ac84ce2338be2d404ad",
+  },
+  {
+    _id: 7,
+    name: "Jeans",
+    weather: "warm",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Jeans.png?etag=58345e8bef1ce5f95ac882e71d309e6c",
+  },
+  {
+    _id: 9,
+    name: "Sandals",
+    weather: "hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sandals.png?etag=9bea85a77c0306586d2b71a33b626d41",
+  },
+  {
+    _id: 10,
+    name: "Scarf",
+    weather: "cold",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Scarf.png?etag=74efbee93810c926b5507e862c6cb76c",
+  },
+  {
+    _id: 11,
+    name: "Shorts",
+    weather: "Hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Shorts.png?etag=d728c496643f610de8d8fea92dd915ba",
+  },
+  {
+    _id: 12,
+    name: "Skirt",
+    weather: "hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Skirt.png?etag=27a6bea7e1b63218820d615876fa31d1",
+  },
+  {
+    _id: 13,
+    name: "Sneakers",
+    weather: "warm",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sneakers.png?etag=3efeec41c1c78b8afe26859ca7fa7b6f",
+  },
+  {
+    _id: 15,
+    name: "Sweatshirt",
+    weather: "warm",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sweatshirt.png?etag=008a9674757bea2e0bdb31242e364be0",
+  },
+  {
+    _id: 16,
+    name: "T-Shirt",
+    weather: "hot",
+    imageUrl:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/T-Shirt.png?etag=44ed1963c44ab19cd2f5011522c5fc09",
+  },
+  {
+    name: "Hat",
+    weather: "hot",
+    imageUrl:
+      "https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aGF0fGVufDB8fDB8fHww",
+    _id: 17,
+  },
+  {
+    name: "Long Sleeve",
+    weather: "warm",
+    imageUrl:
+      "https://plus.unsplash.com/premium_photo-1690034978688-dbdd03eab792?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bG9uZyUyMHNsZWV2ZXxlbnwwfHwwfHx8MA%3D%3D",
+    _id: 19,
+  },
+  {
+    name: "Poncho",
+    weather: "cold",
+    imageUrl:
+      "https://media.istockphoto.com/id/1433183269/photo/vibrant-mexican-ponchos-for-sale-retail-display.webp?b=1&s=612x612&w=0&k=20&c=0bu_o0mOdfPCaJGcLPeQM0phwjgRgK_0THT6ZKiNgoE=",
+    _id: 20,
+  },
+  {
+    name: "Socks",
+    imageUrl:
+      "https://images.freeimages.com/images/large-previews/43e/autumn-socks-1151694.jpg?fmt=webp&w=500",
+    weather: "warm",
+    _id: 21,
+  },
+];
+
+// Function to seed the database
+async function seedDatabase() {
+  try {
+    const response = await fetch("http://localhost:3001/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(items),
+    });
+    const data = await response.json();
+    console.log("Database seeded:", data);
+  } catch (error) {
+    console.error("Error seeding database:", error);
+  }
+}
+
+seedDatabase();
