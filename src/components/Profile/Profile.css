@@ -7,14 +7,21 @@
 .profile__content {
   display: flex;
   flex-direction: row;
+  gap: 100px;
+  width: 100%;
+  max-width: 1360px;
+  padding: 0 20px;
 }
 
 .profile__sidebar {
   flex-shrink: 0;
-  margin-right: 100px;
 }
 
 .profile__clothing-items {
   max-width: 1015px;
   flex-grow: 1;
+}
+
+.clothes-section__header {
+  margin: 0 0 16px;
 }

@@ -32,20 +32,32 @@ export function getItems() {
     });
 }
 
-export const addItem = (item) => {
+export const addItem = (item, token) => {
   console.log("Sending item to server:", JSON.stringify(item, null, 2));
+  console.log("Token for addItem:", token ? "Present" : "Missing");
+
   return request(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(item),
   });
 };
 
 export const deleteItem = (id) => {
+  const token = localStorage.getItem("jwt");
+  if (!token) {
+    return Promise.reject(new Error("No authorization token found"));
+  }
+
   return request(`${baseUrl}/items/${id}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
   });
 };
 

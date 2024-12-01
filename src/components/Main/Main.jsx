@@ -6,6 +6,12 @@ import ItemCard from "../ItemCard/ItemCard";
 import TemperatureDisplay from "../TemperatureDisplay/TemperatureDisplay";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 
+console.log("Main imports:", {
+  WeatherCard: !!WeatherCard,
+  ItemCard: !!ItemCard,
+  TemperatureDisplay: !!TemperatureDisplay,
+});
+
 function Main({
   weatherData,
   handleCardClick,
@@ -13,6 +19,21 @@ function Main({
   isLoading,
   onCardLike,
 }) {
+  console.log("Main component rendering with:", {
+    weatherData,
+    clothingItemsCount: clothingItems.length,
+    isLoading,
+  });
+
+  console.log("Main function executing");
+
+  console.log("Main component props:", {
+    hasWeatherData: !!weatherData,
+    hasClothingItems: !!clothingItems,
+    weatherType: weatherData?.type,
+    itemsCount: clothingItems?.length,
+  });
+
   const { currentTemperatureUnit } = useContext(CurrentTempUnitContext);
 
   console.log("Main component - weatherData.type:", weatherData.type);
@@ -26,8 +47,11 @@ function Main({
     return <div className="loading">Loading...</div>;
   }
 
+  console.log("Main about to return JSX");
+
   return (
     <main>
+      {console.log("Rendering main content")}
       <WeatherCard weatherData={weatherData} />
       <section className="cards">
         <p className="cards__text">

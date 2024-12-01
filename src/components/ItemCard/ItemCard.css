@@ -10,6 +10,8 @@
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   overflow: hidden;
+  --like-button-inactive: url(../../assets/like-inactive.svg);
+  --like-button-active: url(../../assets/like-active.svg);
 }
 
 .card:hover {
@@ -19,16 +21,14 @@
 .card__header {
   position: absolute;
   top: 15px;
-  left: 15px;
-  right: 15px;
-  display: flex;
+  display: inline-flex;
+  justify-content: center;
   align-items: center;
   gap: 8px;
   z-index: 1;
 }
 
 .card__name {
-  position: static;
   margin: 0;
   padding: 2px 12px;
   overflow: hidden;
@@ -39,7 +39,8 @@
   font-size: 16px;
   line-height: 1.25;
   color: rgba(0, 0, 0, 0.6);
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
 }
 
 .card__image {
@@ -52,21 +53,20 @@
 }
 
 .card__like-button {
-  width: 24px;
-  height: 24px;
-  background: url("../../images/like-inactive.svg") center no-repeat;
-  background-color: #fff;
-  background-size: 16px;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
-  cursor: pointer;
-  transition: opacity 0.3s;
   flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  background-image: var(--like-button-inactive);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .card__like-button_active {
-  background-image: url("../../images/like-active.svg");
+  background-image: var(--like-button-active);
 }
 
 .card__like-button_hidden {

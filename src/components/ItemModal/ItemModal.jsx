@@ -9,18 +9,19 @@ import "./ItemModal.css";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { useEscape } from "../../hooks/useEscape";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
-  const { currentUser } = useContext(CurrentUserContext);
-  const isOwn = card.owner === currentUser._id;
+  const { currentUser } = useContext(AuthContext);
+  const isOwn = currentUser && card.owner === currentUser._id;
 
-  const itemDeleteButtonClassName = `item__delete-button ${
-    isOwn ? "item__delete-button_visible" : "item__delete-button_hidden"
+  const itemDeleteButtonClassName = `modal__delete-button ${
+    isOwn ? "modal__delete-button_visible" : "modal__delete-button_hidden"
   }`;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -36,10 +37,19 @@ function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
   useOverlayClick(modalRef, handleClose);
 
   const handleDeleteClick = () => {
+    if (!isOwn) {
+      setShowErrorModal(true);
+      return;
+    }
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = () => {
+    if (!isOwn) {
+      console.error("Not authorized to delete this item");
+      return;
+    }
+
     onDeleteItem(card._id)
       .then(() => {
         handleClose();
@@ -86,6 +96,12 @@ function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
+      />
+      <DeleteConfirmationModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        message="You are not authorized to delete this item"
+        showConfirm={false}
       />
     </>
   );

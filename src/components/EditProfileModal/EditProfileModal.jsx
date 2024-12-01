@@ -1,15 +1,15 @@
 import { useState, useContext, useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { AuthContext } from "../../contexts/AuthContext";
+import "./EditProfileModal.css";
 
 function EditProfileModal({ onClose, onUpdateUser, isLoading }) {
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     avatar: "",
   });
 
-  // Pre-fill form with current user data when modal opens
   useEffect(() => {
     setFormData({
       name: currentUser.name || "",
@@ -34,27 +34,34 @@ function EditProfileModal({ onClose, onUpdateUser, isLoading }) {
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Saving..." : "Save changes"}
     >
-      <label>
-        Name
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-      </label>
-      <label>
-        Avatar URL
-        <input
-          type="url"
-          name="avatar"
-          value={formData.avatar}
-          onChange={handleChange}
-          placeholder="Avatar URL"
-        />
-      </label>
+      <div className="modal__input-wrapper">
+        <label className="modal__label">
+          Name*
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+            className="modal__input"
+            required
+          />
+        </label>
+      </div>
+      <div className="modal__input-wrapper">
+        <label className="modal__label">
+          Avatar URL*
+          <input
+            type="url"
+            name="avatar"
+            value={formData.avatar}
+            onChange={handleChange}
+            placeholder="Avatar URL"
+            className="modal__input"
+            required
+          />
+        </label>
+      </div>
     </ModalWithForm>
   );
 }

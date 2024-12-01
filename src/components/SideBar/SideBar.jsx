@@ -26,7 +26,7 @@ function SideBar({ username, avatar, onEditProfile, onSignOut }) {
           className="sidebar__button sidebar__button_type_logout"
           onClick={onSignOut}
         >
-          Sign Out
+          Log Out
         </button>
       </div>
     </div>

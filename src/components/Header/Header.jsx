@@ -4,7 +4,7 @@ import "./Header.css";
 import headerLogo from "../../assets/logo.svg";
 import avatarDefault from "../../assets/avatar-placeholder.png";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Header({
   handleAddButtonClick,
@@ -12,7 +12,7 @@ function Header({
   onLoginClick,
   onRegisterClick,
 }) {
-  const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
+  const { currentUser, isLoggedIn } = useContext(AuthContext);
 
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
@@ -27,7 +27,7 @@ function Header({
       <p className="header__spacetime">{`${currentDate}, ${
         weatherData.city || "Loading..."
       }`}</p>
-      {isLoggedIn ? (
+      {isLoggedIn && currentUser ? (
         <>
           <div className="header__controls">
             <ToggleSwitch className="header__toggle-switch" />

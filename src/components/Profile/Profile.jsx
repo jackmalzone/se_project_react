@@ -1,6 +1,8 @@
 import "./Profile.css";
 import SideBar from "../SideBar/SideBar.jsx";
 import ClothesSection from "../ClothesSection/ClothesSection.jsx";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Profile({
   onCardClick,
@@ -9,16 +11,17 @@ function Profile({
   onAddNewClick,
   onEditProfile,
   onSignOut,
-  username,
-  avatar,
+  onCardLike,
 }) {
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <div className="profile">
       <div className="profile__content">
         <section className="profile__sidebar">
           <SideBar
-            username={username}
-            avatar={avatar}
+            username={currentUser?.name}
+            avatar={currentUser?.avatar}
             onEditProfile={onEditProfile}
             onSignOut={onSignOut}
           />
@@ -29,6 +32,7 @@ function Profile({
             clothingItems={clothingItems}
             onDeleteItem={onDeleteItem}
             onAddNewClick={onAddNewClick}
+            onCardLike={onCardLike}
           />
         </section>
       </div>

@@ -1,12 +1,14 @@
 import React, { useState, useContext } from "react";
 import "./ItemCard.css";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { AuthContext } from "../../contexts/AuthContext";
+import likeInactive from "../../assets/like-inactive.svg";
+import likeActive from "../../assets/like-active.svg";
 
 function ItemCard({ item, onCardClick, onCardLike }) {
   const [imageError, setImageError] = useState(false);
-  const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
+  const { currentUser, isLoggedIn } = useContext(AuthContext);
 
-  const isLiked = item.likes?.some((id) => id === currentUser._id);
+  const isLiked = item.likes?.some((id) => id === currentUser?._id);
 
   const itemLikeButtonClassName = `card__like-button ${
     isLiked ? "card__like-button_active" : ""

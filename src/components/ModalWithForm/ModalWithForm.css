@@ -49,7 +49,7 @@
 }
 
 .modal__title {
-  margin: 0 0 24px;
+  margin: 0;
   font-size: 16px;
 }
 
@@ -58,8 +58,12 @@
   flex-direction: column;
 }
 
+.modal__legend {
+  margin: 0 0 12px;
+}
+
 .modal__label_type_input {
-  margin: 24px 0;
+  margin: 24px 0 0;
 }
 
 .modal__label_type_radio {
@@ -72,7 +76,7 @@
   border: none;
   border-bottom: 1px solid #000000;
   outline: none;
-  margin: 8px 0 24px;
+  margin: 8px 0 0;
   transition: border-color 0.3s ease;
 }
 
@@ -107,7 +111,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin: 24px 0 32px;
+  margin: 0;
 }
 
 .modal__submit {

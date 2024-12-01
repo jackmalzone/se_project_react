@@ -1,13 +1,34 @@
-import React, { useRef } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import "./AddItemModal.css";
 import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
+import { useEscape } from "../../hooks/useEscape";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
+  const { currentUser } = useContext(AuthContext);
+  console.log("AddItemModal rendering with currentUser:", currentUser);
   const modalRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
   const { values, handleChange, errors, isValid, resetForm } =
     useFormAndValidation();
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setTimeout(onClose, 300);
+  }, [onClose]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,15 +37,19 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
     }
   };
 
+  useEscape(handleClose);
+  useOverlayClick(modalRef, handleClose);
+
   return (
     <ModalWithForm
       title="New Garment"
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit}
       ref={modalRef}
       buttonText={isLoading ? "Saving..." : "Add garment"}
       isValid={isValid}
       isLoading={isLoading}
+      isOpen={isOpen}
     >
       <label
         htmlFor="name-input"

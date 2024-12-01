@@ -1,14 +1,19 @@
 import "./ClothesSection.css";
 import ItemCard from "../ItemCard/ItemCard.jsx";
 import { useContext } from "react";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
-function ClothesSection({ onCardClick, clothingItems = [], onAddNewClick }) {
-  const { currentUser } = useContext(CurrentUserContext);
+function ClothesSection({
+  onCardClick,
+  clothingItems = [],
+  onAddNewClick,
+  onCardLike,
+}) {
+  const { currentUser } = useContext(AuthContext);
 
-  const userItems = clothingItems.filter(
-    (item) => item.owner === currentUser._id
-  );
+  const userItems = currentUser
+    ? clothingItems.filter((item) => item.owner === currentUser._id)
+    : [];
 
   return (
     <div className="clothes-section">
@@ -24,7 +29,11 @@ function ClothesSection({ onCardClick, clothingItems = [], onAddNewClick }) {
             key={item._id || item.id || Date.now().toString()}
             className="clothes-section__item"
           >
-            <ItemCard item={item} onCardClick={onCardClick} />
+            <ItemCard
+              item={item}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+            />
           </li>
         ))}
       </ul>

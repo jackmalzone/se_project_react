@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
 import "../../utils/index.css";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -20,10 +19,18 @@ import {
   removeCardLike,
 } from "../../utils/api";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
-import { updateProfile, login, register } from "../../utils/auth";
+import { updateProfile, login, register, checkToken } from "../../utils/auth";
 import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import avatarDefault from "../../assets/avatar-placeholder.png";
+import { AuthContext } from "../../contexts/AuthContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+
+console.log("Checking imports:", {
+  Header: !!Header,
+  Main: !!Main,
+  Footer: !!Footer,
+});
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -35,11 +42,15 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [userAvatar, setUserAvatar] = useState(null);
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
+
+  console.log("App rendering - weatherData:", weatherData);
+  console.log("App rendering - clothingItems:", clothingItems);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -48,6 +59,10 @@ function App() {
   };
 
   const handleAddButtonClick = () => {
+    if (!isLoggedIn) {
+      setActiveModal("login");
+      return;
+    }
     console.log("Add button clicked, setting activeModal to 'add-garment'");
     setActiveModal("add-garment");
   };
@@ -72,12 +87,31 @@ function App() {
   };
 
   const handleAddItem = (item, resetForm) => {
+    const token = localStorage.getItem("jwt");
+    console.log(
+      "handleAddItem called with token:",
+      token ? "exists" : "missing"
+    );
+
+    if (!token) {
+      console.log("No token found, redirecting to login");
+      setActiveModal("login");
+      return;
+    }
+
     const makeRequest = () => {
-      return addItem(item).then((newItem) => {
-        setClothingItems((prevItems) => [newItem, ...prevItems]);
-        resetForm();
-        return newItem;
-      });
+      console.log("Making add item request with data:", item);
+      return addItem(item, token)
+        .then((newItem) => {
+          console.log("Item added successfully:", newItem);
+          setClothingItems((prevItems) => [newItem, ...prevItems]);
+          resetForm();
+          return newItem;
+        })
+        .catch((error) => {
+          console.error("Error adding item:", error);
+          throw error;
+        });
     };
     handleSubmit(makeRequest);
   };
@@ -93,8 +127,13 @@ function App() {
     setIsLoading(true);
     updateProfile({ name, avatar }, token)
       .then((userData) => {
-        setUserName(userData.name);
+        setUsername(userData.name);
         setUserAvatar(userData.avatar);
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          name: userData.name,
+          avatar: userData.avatar,
+        }));
         closeActiveModal();
       })
       .catch(console.error)
@@ -119,8 +158,10 @@ function App() {
   console.log("App rendering, activeModal:", activeModal);
 
   useEffect(() => {
+    console.log("Weather useEffect running");
     getWeather(coordinates, APIkey)
       .then((data) => {
+        console.log("Weather data received:", data);
         const filteredData = filterWeatherData(data);
         console.log("Filtered weather data:", filteredData);
         const tempF = filteredData.temp.F;
@@ -171,55 +212,56 @@ function App() {
   const handleSignOut = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
-    setUserName("");
+    setUsername("");
     setUserAvatar(null);
   };
 
-  const handleLogin = (data) => {
+  const handleLogin = ({ email, password }) => {
     setIsLoading(true);
-    login(data)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
-          setIsLoggedIn(true);
-          setUserName(res.name);
-          setUserAvatar(res.avatar);
-          closeActiveModal();
-          navigate("/");
+    login({ email, password })
+      .then((data) => {
+        if (data && data.token) {
+          localStorage.setItem("jwt", data.token);
+          return checkToken(data.token);
         }
+        return Promise.reject("No token received");
       })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  };
-
-  const handleRegister = (data) => {
-    setIsLoading(true);
-    register(data)
-      .then((res) => {
-        if (res && res._id) {
-          return login({
-            email: data.email,
-            password: data.password,
-          });
-        }
-        return Promise.reject("Registration failed - no user ID returned");
-      })
-      .then((loginRes) => {
-        if (loginRes && loginRes.token) {
-          localStorage.setItem("jwt", loginRes.token);
-          setIsLoggedIn(true);
-          setUserName(loginRes.name);
-          setUserAvatar(loginRes.avatar);
-          closeActiveModal();
-          navigate("/");
-        }
+      .then((userData) => {
+        setIsLoggedIn(true);
+        setCurrentUser(userData);
+        setUsername(userData.name);
+        setUserAvatar(userData.avatar);
+        closeActiveModal();
+        navigate("/profile");
       })
       .catch((error) => {
-        console.error("Registration/Login error details:", error);
+        console.error("Login error:", error);
       })
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleRegister = ({ name, avatar, email, password }) => {
+    setIsLoading(true);
+    register({ name, avatar, email, password })
+      .then(() => {
+        return login({ email, password });
+      })
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
+          checkToken(data.token)
+            .then((userData) => {
+              setCurrentUser(userData);
+              setIsLoggedIn(true);
+              closeActiveModal();
+            })
+            .catch(console.error);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   const handleLoginClick = () => {
@@ -230,12 +272,42 @@ function App() {
     setActiveModal("register");
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      checkToken(token)
+        .then((userData) => {
+          setCurrentUser(userData);
+          setIsLoggedIn(true);
+        })
+        .catch((err) => {
+          console.error(err);
+          localStorage.removeItem("jwt");
+        });
+    }
+  }, []);
+
+  console.log("App rendering - before Routes");
+
+  console.log("App state before render:", {
+    isLoggedIn,
+    weatherData,
+    clothingItems,
+    activeModal,
+  });
+
+  console.log("App rendering structure");
+
+  console.log("About to render Main with:", {
+    isLoggedIn,
+    hasWeatherData: !!weatherData,
+    weatherType: weatherData.type,
+    clothingItemsCount: clothingItems.length,
+  });
+
   return (
-    <CurrentUserContext.Provider
-      value={{
-        currentUser: { _id: "", name: userName, avatar: userAvatar },
-        isLoggedIn,
-      }}
+    <AuthContext.Provider
+      value={{ isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser }}
     >
       <CurrentTempUnitContext.Provider
         value={{ currentTemperatureUnit, handleToggleSwitchChange }}
@@ -252,49 +324,76 @@ function App() {
               <Route
                 path="/"
                 element={
-                  <Main
-                    weatherData={weatherData}
-                    handleCardClick={handleCardClick}
-                    clothingItems={clothingItems}
-                    isLoading={isLoading}
-                    onCardLike={handleCardLike}
-                  />
+                  isLoading ? (
+                    <div>Loading...</div>
+                  ) : isLoggedIn ? (
+                    <Main
+                      weatherData={weatherData}
+                      handleCardClick={handleCardClick}
+                      clothingItems={clothingItems}
+                      isLoading={isLoading}
+                      onCardLike={handleCardLike}
+                    />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
                 }
               />
               <Route
                 path="/profile"
                 element={
-                  <Profile
-                    onCardClick={handleCardClick}
-                    clothingItems={clothingItems}
-                    onDeleteItem={handleDeleteItem}
-                    onAddNewClick={handleAddButtonClick}
-                    username={userName}
-                    avatar={userAvatar}
-                    onEditProfile={handleEditProfile}
-                    onSignOut={handleSignOut}
-                  />
+                  <ProtectedRoute>
+                    <Profile
+                      onCardClick={handleCardClick}
+                      clothingItems={clothingItems}
+                      onDeleteItem={handleDeleteItem}
+                      onAddNewClick={handleAddButtonClick}
+                      username={username}
+                      avatar={userAvatar}
+                      onEditProfile={handleEditProfile}
+                      onSignOut={handleSignOut}
+                      onCardLike={handleCardLike}
+                    />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/login"
                 element={
-                  <LoginModal
-                    onClose={() => navigate("/")}
-                    onLogin={handleLogin}
-                    isLoading={isLoading}
-                    onRegisterClick={handleRegisterClick}
-                  />
+                  isLoggedIn ? (
+                    <Navigate to="/" replace />
+                  ) : (
+                    <LoginModal
+                      onClose={() => navigate("/")}
+                      onLogin={handleLogin}
+                      isLoading={isLoading}
+                      onRegisterClick={handleRegisterClick}
+                    />
+                  )
                 }
               />
               <Route
                 path="/signup"
                 element={
-                  <RegisterModal
-                    onClose={() => navigate("/")}
-                    onRegister={handleRegister}
-                    isLoading={isLoading}
-                  />
+                  isLoggedIn ? (
+                    <Navigate to="/" replace />
+                  ) : (
+                    <RegisterModal
+                      onClose={() => navigate("/")}
+                      onRegister={handleRegister}
+                      isLoading={isLoading}
+                    />
+                  )
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  isLoggedIn ? (
+                    <Navigate to="/profile" replace />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
                 }
               />
             </Routes>
@@ -339,7 +438,7 @@ function App() {
           )}
         </div>
       </CurrentTempUnitContext.Provider>
-    </CurrentUserContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
