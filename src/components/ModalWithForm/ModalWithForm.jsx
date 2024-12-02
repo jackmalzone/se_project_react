@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./ModalWithForm.css";
+import { useEscape } from "../../hooks/useEscape";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 
 const ModalWithForm = React.forwardRef(
   (
@@ -15,21 +17,11 @@ const ModalWithForm = React.forwardRef(
     },
     ref
   ) => {
-    console.log("ModalWithForm rendering", { title, isValid });
-
-    const handleMouseDown = (e) => {
-      if (e.target.classList.contains("modal")) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
+    useEscape(onClose);
+    useOverlayClick(ref, onClose);
 
     return (
-      <div
-        className="modal modal_type_form modal_opened"
-        ref={ref}
-        onMouseDown={handleMouseDown}
-      >
+      <div className="modal modal_type_form modal_opened" ref={ref}>
         <div className="modal__content">
           <button
             type="button"
