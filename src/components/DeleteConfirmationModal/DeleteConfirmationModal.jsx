@@ -9,10 +9,13 @@ function DeleteConfirmationModal({
   message = "Are you sure you want to delete this item?",
   showConfirm = true,
 }) {
+  const modalRef = useRef(null);
+  useOverlayClick(modalRef, onClose);
+
   if (!isOpen) return null;
 
   return (
-    <div className="delete-modal">
+    <div className="delete-modal" ref={modalRef}>
       <div className="delete-modal__content">
         <button
           className="delete-modal__close"

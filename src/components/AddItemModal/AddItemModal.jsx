@@ -3,8 +3,6 @@ import "./AddItemModal.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
-import { useEscape } from "../../hooks/useEscape";
-import { useOverlayClick } from "../../hooks/useOverlayClick";
 
 const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   const modalRef = useRef(null);
@@ -37,9 +35,6 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
       onAddItem(values, resetForm);
     }
   };
-
-  useEscape(handleClose);
-  useOverlayClick(modalRef, handleClose);
 
   return (
     <ModalWithForm

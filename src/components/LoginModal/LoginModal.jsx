@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
-import { useOverlayClick } from "../../hooks/useOverlayClick";
 import Input from "../Input/Input";
 import "./LoginModal.css";
 
@@ -12,8 +11,6 @@ const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
     email: false,
     password: false,
   });
-
-  useOverlayClick(modalRef, onClose);
 
   const handleBlur = (e) => {
     const { name } = e.target;

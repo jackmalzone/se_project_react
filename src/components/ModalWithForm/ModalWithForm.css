@@ -59,6 +59,14 @@
   flex-direction: column;
 }
 
+.modal__label {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 24px;
+  color: #000;
+  transition: color 0.3s ease;
+}
+
 .modal__legend {
   margin: 0 0 12px;
 }
@@ -68,6 +76,8 @@
 }
 
 .modal__label_type_radio {
+  display: flex;
+  flex-direction: row;
   gap: 10px;
 }
 
@@ -186,13 +196,6 @@
 
 .modal__label:last-of-type {
   margin-bottom: 30px;
-}
-.modal__label {
-  display: flex;
-  flex-direction: column;
-  margin: 0 0 24px;
-  color: #000;
-  transition: color 0.3s ease;
 }
 
 .modal__label_error {
