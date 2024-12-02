@@ -1,21 +1,12 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import "./AddItemModal.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import { useEscape } from "../../hooks/useEscape";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
-  const { currentUser } = useContext(AuthContext);
-  console.log("AddItemModal rendering with currentUser:", currentUser);
   const modalRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const { values, handleChange, errors, isValid, resetForm } =
