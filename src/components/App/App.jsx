@@ -26,6 +26,7 @@ import avatarDefault from "../../assets/avatar-placeholder.png";
 import { AuthContext } from "../../contexts/AuthContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { useError } from "../../contexts/ErrorContext";
+import { AppContext } from "../../contexts/AppContext";
 
 function App() {
   const { showError } = useError();
@@ -124,9 +125,8 @@ function App() {
     const token = localStorage.getItem("jwt");
     if (!token) return;
 
-    setIsLoading(true);
-    updateProfile({ name, avatar }, token)
-      .then((userData) => {
+    const makeRequest = () => {
+      return updateProfile({ name, avatar }, token).then((userData) => {
         setUsername(userData.name);
         setUserAvatar(userData.avatar);
         setCurrentUser((prevUser) => ({
@@ -134,10 +134,11 @@ function App() {
           name: userData.name,
           avatar: userData.avatar,
         }));
-        closeActiveModal();
-      })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+        return userData;
+      });
+    };
+
+    handleSubmit(makeRequest);
   };
 
   const handleCardLike = ({ id, isLiked }) => {
@@ -306,138 +307,140 @@ function App() {
     <AuthContext.Provider
       value={{ isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser }}
     >
-      <CurrentTempUnitContext.Provider
-        value={{ currentTemperatureUnit, handleToggleSwitchChange }}
-      >
-        <div className="page">
-          {console.log("Rendering page with activeModal:", activeModal)}
-          <div className="page__content">
-            <Header
-              handleAddButtonClick={handleAddButtonClick}
-              weatherData={weatherData}
-              onLoginClick={handleLoginClick}
-              onRegisterClick={handleRegisterClick}
-            />
-            {console.log("About to render Routes")}
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  isLoading ? (
-                    <div>Loading...</div>
-                  ) : (
-                    <Main
-                      weatherData={weatherData}
-                      handleCardClick={handleCardClick}
-                      clothingItems={clothingItems}
-                      isLoading={isLoading}
-                      onCardLike={isLoggedIn ? handleCardLike : null}
-                    />
-                  )
-                }
+      <AppContext.Provider value={{ closeActiveModal }}>
+        <CurrentTempUnitContext.Provider
+          value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+        >
+          <div className="page">
+            {console.log("Rendering page with activeModal:", activeModal)}
+            <div className="page__content">
+              <Header
+                handleAddButtonClick={handleAddButtonClick}
+                weatherData={weatherData}
+                onLoginClick={handleLoginClick}
+                onRegisterClick={handleRegisterClick}
               />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile
-                      onCardClick={handleCardClick}
-                      clothingItems={clothingItems}
-                      onDeleteItem={handleDeleteItem}
-                      onAddNewClick={handleAddButtonClick}
-                      username={username}
-                      avatar={userAvatar}
-                      onEditProfile={handleEditProfile}
-                      onSignOut={handleSignOut}
-                      onCardLike={handleCardLike}
-                    />
-                  </ProtectedRoute>
-                }
+              {console.log("About to render Routes")}
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    isLoading ? (
+                      <div>Loading...</div>
+                    ) : (
+                      <Main
+                        weatherData={weatherData}
+                        handleCardClick={handleCardClick}
+                        clothingItems={clothingItems}
+                        isLoading={isLoading}
+                        onCardLike={isLoggedIn ? handleCardLike : null}
+                      />
+                    )
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile
+                        onCardClick={handleCardClick}
+                        clothingItems={clothingItems}
+                        onDeleteItem={handleDeleteItem}
+                        onAddNewClick={handleAddButtonClick}
+                        username={username}
+                        avatar={userAvatar}
+                        onEditProfile={handleEditProfile}
+                        onSignOut={handleSignOut}
+                        onCardLike={handleCardLike}
+                      />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    isLoggedIn ? (
+                      <Navigate to="/" replace />
+                    ) : (
+                      <LoginModal
+                        onClose={() => navigate("/")}
+                        onLogin={handleLogin}
+                        isLoading={isLoading}
+                        onRegisterClick={handleRegisterClick}
+                      />
+                    )
+                  }
+                />
+                <Route
+                  path="/signup"
+                  element={
+                    isLoggedIn ? (
+                      <Navigate to="/" replace />
+                    ) : (
+                      <RegisterModal
+                        onClose={() => navigate("/")}
+                        onRegister={handleRegister}
+                        isLoading={isLoading}
+                        onLoginClick={() => setActiveModal("login")}
+                      />
+                    )
+                  }
+                />
+                <Route
+                  path="*"
+                  element={
+                    isLoggedIn ? (
+                      <Navigate to="/profile" replace />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+              </Routes>
+              <Footer />
+            </div>
+            {console.log("About to render modals, activeModal:", activeModal)}
+            {activeModal === "add-garment" && (
+              <AddItemModal
+                onClose={closeActiveModal}
+                onAddItem={handleAddItem}
+                isLoading={isLoading}
               />
-              <Route
-                path="/login"
-                element={
-                  isLoggedIn ? (
-                    <Navigate to="/" replace />
-                  ) : (
-                    <LoginModal
-                      onClose={() => navigate("/")}
-                      onLogin={handleLogin}
-                      isLoading={isLoading}
-                      onRegisterClick={handleRegisterClick}
-                    />
-                  )
-                }
+            )}
+            {activeModal === "preview" && (
+              <ItemModal
+                card={selectedCard}
+                onClose={closeActiveModal}
+                onDeleteItem={handleDeleteItem}
+                isLoading={isLoading}
               />
-              <Route
-                path="/signup"
-                element={
-                  isLoggedIn ? (
-                    <Navigate to="/" replace />
-                  ) : (
-                    <RegisterModal
-                      onClose={() => navigate("/")}
-                      onRegister={handleRegister}
-                      isLoading={isLoading}
-                      onLoginClick={() => setActiveModal("login")}
-                    />
-                  )
-                }
+            )}
+            {activeModal === "edit-profile" && (
+              <EditProfileModal
+                onClose={closeActiveModal}
+                onUpdateUser={handleUpdateUser}
+                isLoading={isLoading}
               />
-              <Route
-                path="*"
-                element={
-                  isLoggedIn ? (
-                    <Navigate to="/profile" replace />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+            )}
+            {activeModal === "login" && (
+              <LoginModal
+                onClose={closeActiveModal}
+                onLogin={handleLogin}
+                isLoading={isLoading}
+                onRegisterClick={handleRegisterClick}
               />
-            </Routes>
-            <Footer />
+            )}
+            {activeModal === "register" && (
+              <RegisterModal
+                onClose={closeActiveModal}
+                onRegister={handleRegister}
+                isLoading={isLoading}
+                onLoginClick={() => setActiveModal("login")}
+              />
+            )}
           </div>
-          {console.log("About to render modals, activeModal:", activeModal)}
-          {activeModal === "add-garment" && (
-            <AddItemModal
-              onClose={closeActiveModal}
-              onAddItem={handleAddItem}
-              isLoading={isLoading}
-            />
-          )}
-          {activeModal === "preview" && (
-            <ItemModal
-              card={selectedCard}
-              onClose={closeActiveModal}
-              onDeleteItem={handleDeleteItem}
-              isLoading={isLoading}
-            />
-          )}
-          {activeModal === "edit-profile" && (
-            <EditProfileModal
-              onClose={closeActiveModal}
-              onUpdateUser={handleUpdateUser}
-              isLoading={isLoading}
-            />
-          )}
-          {activeModal === "login" && (
-            <LoginModal
-              onClose={closeActiveModal}
-              onLogin={handleLogin}
-              isLoading={isLoading}
-              onRegisterClick={handleRegisterClick}
-            />
-          )}
-          {activeModal === "register" && (
-            <RegisterModal
-              onClose={closeActiveModal}
-              onRegister={handleRegister}
-              isLoading={isLoading}
-              onLoginClick={() => setActiveModal("login")}
-            />
-          )}
-        </div>
-      </CurrentTempUnitContext.Provider>
+        </CurrentTempUnitContext.Provider>
+      </AppContext.Provider>
     </AuthContext.Provider>
   );
 }

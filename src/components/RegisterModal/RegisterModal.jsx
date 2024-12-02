@@ -1,12 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
 import "./RegisterModal.css";
+import { AppContext } from "../../contexts/AppContext";
 
-const RegisterModal = ({ onClose, onRegister, isLoading, onLoginClick }) => {
-  console.log("RegisterModal rendering");
+const RegisterModal = ({ onRegister, isLoading, onLoginClick }) => {
+  const { closeActiveModal } = useContext(AppContext);
   const modalRef = useRef(null);
   const { values, handleChange, errors, isValid } = useFormAndValidation(
     {
@@ -24,7 +25,7 @@ const RegisterModal = ({ onClose, onRegister, isLoading, onLoginClick }) => {
     avatar: false,
   });
 
-  useOverlayClick(modalRef, onClose);
+  useOverlayClick(modalRef, closeActiveModal);
 
   const handleBlur = (e) => {
     const { name } = e.target;
@@ -39,7 +40,7 @@ const RegisterModal = ({ onClose, onRegister, isLoading, onLoginClick }) => {
   return (
     <ModalWithForm
       title="Sign up"
-      onClose={onClose}
+      onClose={closeActiveModal}
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Signing up..." : "Sign up"}
       isValid={isValid}

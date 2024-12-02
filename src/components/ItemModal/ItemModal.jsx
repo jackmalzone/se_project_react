@@ -10,8 +10,10 @@ import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmati
 import { useEscape } from "../../hooks/useEscape";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
 import { AuthContext } from "../../contexts/AuthContext";
+import { AppContext } from "../../contexts/AppContext";
 
-function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
+function ItemModal({ card, onDeleteItem, isLoading }) {
+  const { closeActiveModal } = useContext(AppContext);
   const { currentUser } = useContext(AuthContext);
   const isOwn = currentUser && card.owner === currentUser._id;
 
@@ -30,8 +32,8 @@ function ItemModal({ onClose, card, onDeleteItem, isLoading }) {
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    setTimeout(onClose, 300);
-  }, [onClose]);
+    setTimeout(closeActiveModal, 300);
+  }, [closeActiveModal]);
 
   useEscape(handleClose);
   useOverlayClick(modalRef, handleClose);

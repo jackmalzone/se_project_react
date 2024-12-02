@@ -4,8 +4,10 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import "./EditProfileModal.css";
 import Input from "../Input/Input";
+import { AppContext } from "../../contexts/AppContext";
 
-function EditProfileModal({ onClose, onUpdateUser, isLoading }) {
+function EditProfileModal({ onUpdateUser, isLoading }) {
+  const { closeActiveModal } = useContext(AppContext);
   const { currentUser } = useContext(AuthContext);
   const { values, handleChange, errors, isValid, resetForm } =
     useFormAndValidation({
@@ -30,7 +32,7 @@ function EditProfileModal({ onClose, onUpdateUser, isLoading }) {
   return (
     <ModalWithForm
       title="Edit Profile"
-      onClose={onClose}
+      onClose={closeActiveModal}
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Saving..." : "Save changes"}
       isValid={isValid}

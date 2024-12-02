@@ -1,10 +1,18 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import "./AddItemModal.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
+import { AppContext } from "../../contexts/AppContext";
 
-const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
+const AddItemModal = ({ onAddItem, isLoading }) => {
+  const { closeActiveModal } = useContext(AppContext);
   const modalRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const { values, handleChange, errors, isValid, resetForm } =
@@ -21,8 +29,8 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    setTimeout(onClose, 300);
-  }, [onClose]);
+    setTimeout(closeActiveModal, 300);
+  }, [closeActiveModal]);
 
   const handleBlur = (e) => {
     const { name } = e.target;

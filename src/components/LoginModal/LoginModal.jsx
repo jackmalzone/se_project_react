@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import Input from "../Input/Input";
 import "./LoginModal.css";
+import { AppContext } from "../../contexts/AppContext";
 
-const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
+const LoginModal = ({ onLogin, isLoading, onRegisterClick }) => {
+  const { closeActiveModal } = useContext(AppContext);
   const modalRef = useRef(null);
   const { values, handleChange, errors, isValid } = useFormAndValidation();
   const [touched, setTouched] = useState({
@@ -29,7 +31,7 @@ const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
   return (
     <ModalWithForm
       title="Log in"
-      onClose={onClose}
+      onClose={closeActiveModal}
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Logging in..." : "Log in"}
       isValid={isValid}
