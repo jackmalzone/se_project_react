@@ -6,8 +6,8 @@ import React, {
   useContext,
 } from "react";
 import "./AddItemModal.css";
-import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import { useEscape } from "../../hooks/useEscape";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
@@ -20,6 +20,11 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { values, handleChange, errors, isValid, resetForm } =
     useFormAndValidation();
+  const [touched, setTouched] = useState({
+    name: false,
+    imageUrl: false,
+    weather: false,
+  });
 
   useEffect(() => {
     setIsOpen(true);
@@ -29,6 +34,11 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
     setIsOpen(false);
     setTimeout(onClose, 300);
   }, [onClose]);
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,68 +61,48 @@ const AddItemModal = ({ onClose, onAddItem, isLoading }) => {
       isLoading={isLoading}
       isOpen={isOpen}
     >
-      <label
-        htmlFor="name-input"
-        className="modal__label modal__label_type_input"
-      >
-        Name
-        <input
-          id="name-input"
-          className="modal__input"
-          type="text"
-          name="name"
-          value={values.name || ""}
-          placeholder="Name"
-          minLength="1"
-          maxLength="30"
-          aria-label="Garment name"
-          required
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        {errors.name && <span className="modal__error">{errors.name}</span>}
-      </label>
-      <label htmlFor="image-input" className="modal__label">
-        Image
-        <input
-          id="image-input"
-          className="modal__input"
-          type="url"
-          name="imageUrl"
-          value={values.imageUrl || ""}
-          placeholder="Image URL"
-          aria-label="Image URL"
-          required
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        {errors.imageUrl && (
-          <span className="modal__error">{errors.imageUrl}</span>
-        )}
-      </label>
-
+      <Input
+        label="Name"
+        type="text"
+        name="name"
+        value={values.name}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="Name"
+        minLength="1"
+        maxLength="30"
+        required
+        touched={touched.name}
+        error={errors.name}
+      />
+      <Input
+        label="Image"
+        type="url"
+        name="imageUrl"
+        value={values.imageUrl}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="Image URL"
+        required
+        touched={touched.imageUrl}
+        error={errors.imageUrl}
+      />
       <fieldset className="modal__radio-buttons">
         <legend className="modal__legend">Select the weather type:</legend>
         {["hot", "warm", "cold"].map((type) => (
-          <label
-            key={type}
-            htmlFor={`weather-${type}`}
-            className="modal__label modal__label_type_radio"
-          >
+          <label key={type} className="modal__label modal__label_type_radio">
             <input
-              id={`weather-${type}`}
-              className="modal__radio-input"
               type="radio"
               name="weather"
               value={type}
               checked={values.weather === type}
               onChange={handleChange}
-              autoComplete="off"
+              className="modal__radio-input"
             />
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </label>
         ))}
-        {errors.weather && (
+        {touched.weather && errors.weather && (
           <span className="modal__error">{errors.weather}</span>
         )}
       </fieldset>

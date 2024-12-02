@@ -1,4 +1,5 @@
 .modal {
+  font-size: 20px;
   position: fixed;
   top: 0;
   left: 0;
@@ -49,8 +50,8 @@
 }
 
 .modal__title {
-  margin: 0;
-  font-size: 16px;
+  font-size: 20px;
+  margin: 0 0 24px;
 }
 
 .modal__form {
@@ -63,7 +64,7 @@
 }
 
 .modal__label_type_input {
-  margin: 24px 0 0;
+  margin: 0;
 }
 
 .modal__label_type_radio {
@@ -100,6 +101,7 @@
 .modal__required {
   margin-left: 2px;
   color: #000;
+  display: inline;
 }
 
 .modal__required_error {
@@ -115,8 +117,9 @@
 }
 
 .modal__submit {
-  width: 124px;
+  width: 128px;
   height: 36px;
+  font-size: 16px;
   background-color: #000000;
   color: #ffffff;
   border: none;
@@ -133,7 +136,6 @@
   color: #000;
   text-decoration: none;
   cursor: pointer;
-  font-size: 16px;
   padding: 0;
   margin: 0;
 }
@@ -183,15 +185,33 @@
 }
 
 .modal__label:last-of-type {
-  margin-bottom: 32px;
+  margin-bottom: 30px;
 }
 .modal__label {
-  display: block;
-  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 24px;
   color: #000;
   transition: color 0.3s ease;
 }
 
 .modal__label_error {
   color: #ff4d00;
+}
+
+.modal__label-text {
+  display: inline-block;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+/* .modal__label-text::after {
+  content: "*";
+  color: inherit;
+  margin-left: 2px;
+  display: inline-block;
+} */
+
+.modal__label:has(input:not([required])) .modal__label-text::after {
+  display: none;
 }

@@ -27,37 +27,37 @@ function Header({
       <p className="header__spacetime">{`${currentDate}, ${
         weatherData.city || "Loading..."
       }`}</p>
+      <div className="header__controls">
+        <ToggleSwitch className="header__toggle-switch" />
+        {isLoggedIn && currentUser && (
+          <button
+            onClick={handleAddButtonClick}
+            type="button"
+            className="header__button-add-clothes"
+          >
+            + Add Clothes
+          </button>
+        )}
+      </div>
       {isLoggedIn && currentUser ? (
-        <>
-          <div className="header__controls">
-            <ToggleSwitch className="header__toggle-switch" />
-            <button
-              onClick={handleAddButtonClick}
-              type="button"
-              className="header__button-add-clothes"
-            >
-              + Add Clothes
-            </button>
+        <Link to="/profile" className="header__profile-link">
+          <div className="header__profile">
+            <p className="header__username">{currentUser.name}</p>
+            {currentUser.avatar ? (
+              <img
+                className="header__avatar"
+                src={currentUser.avatar}
+                alt="avatar"
+              />
+            ) : (
+              <img
+                className="header__avatar"
+                src={avatarDefault}
+                alt="default avatar"
+              />
+            )}
           </div>
-          <Link to="/profile" className="header__profile-link">
-            <div className="header__profile">
-              <p className="header__username">{currentUser.name}</p>
-              {currentUser.avatar ? (
-                <img
-                  className="header__avatar"
-                  src={currentUser.avatar}
-                  alt="avatar"
-                />
-              ) : (
-                <img
-                  className="header__avatar"
-                  src={avatarDefault}
-                  alt="default avatar"
-                />
-              )}
-            </div>
-          </Link>
-        </>
+        </Link>
       ) : (
         <div className="header__auth-buttons">
           <button onClick={onRegisterClick} className="header__button">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
 import "../../utils/index.css";
@@ -306,6 +306,10 @@ function App() {
     clothingItemsCount: clothingItems.length,
   });
 
+  const handleCloseModal = useCallback(() => {
+    setActiveModal(null);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{ isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser }}
@@ -383,6 +387,7 @@ function App() {
                       onClose={() => navigate("/")}
                       onRegister={handleRegister}
                       isLoading={isLoading}
+                      onLoginClick={() => setActiveModal("login")}
                     />
                   )
                 }
@@ -436,6 +441,7 @@ function App() {
               onClose={closeActiveModal}
               onRegister={handleRegister}
               isLoading={isLoading}
+              onLoginClick={() => setActiveModal("login")}
             />
           )}
         </div>

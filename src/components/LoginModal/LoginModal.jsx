@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 import Input from "../Input/Input";
 
 const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
-  console.log("LoginModal rendering");
+  const modalRef = useRef(null);
   const { values, handleChange, errors, isValid } = useFormAndValidation();
   const [touched, setTouched] = useState({
     email: false,
     password: false,
   });
+
+  useOverlayClick(modalRef, onClose);
 
   const handleBlur = (e) => {
     const { name } = e.target;
@@ -32,6 +35,7 @@ const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Logging in..." : "Log in"}
       isValid={isValid}
+      ref={modalRef}
       extraButton={
         <div className="modal__footer">
           <span className="modal__text">or</span>

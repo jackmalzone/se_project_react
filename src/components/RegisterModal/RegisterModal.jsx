@@ -1,22 +1,29 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
+import { useOverlayClick } from "../../hooks/useOverlayClick";
 
-const RegisterModal = ({ onClose, onRegister, isLoading }) => {
+const RegisterModal = ({ onClose, onRegister, isLoading, onLoginClick }) => {
   console.log("RegisterModal rendering");
-  const { values, handleChange, errors, isValid } = useFormAndValidation({
-    email: "",
-    password: "",
-    name: "",
-    avatar: "",
-  });
+  const modalRef = useRef(null);
+  const { values, handleChange, errors, isValid } = useFormAndValidation(
+    {
+      email: "",
+      password: "",
+      name: "",
+      avatar: "",
+    },
+    false
+  );
   const [touched, setTouched] = useState({
     email: false,
     password: false,
     name: false,
     avatar: false,
   });
+
+  useOverlayClick(modalRef, onClose);
 
   const handleBlur = (e) => {
     const { name } = e.target;
@@ -25,14 +32,6 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("RegisterModal - Form values detail:", {
-      email: values.email || "missing",
-      name: values.name || "missing",
-      password: values.password || "missing",
-      avatar: values.avatar || "missing",
-      isValid,
-      errors,
-    });
     onRegister(values);
   };
 
@@ -43,6 +42,15 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
       onSubmit={handleSubmit}
       buttonText={isLoading ? "Signing up..." : "Sign up"}
       isValid={isValid}
+      ref={modalRef}
+      extraButton={
+        <div className="modal__footer">
+          <span className="modal__text">or</span>
+          <button type="button" className="modal__link" onClick={onLoginClick}>
+            Log in
+          </button>
+        </div>
+      }
     >
       <Input
         label="Email"
@@ -77,9 +85,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
         onChange={handleChange}
         onBlur={handleBlur}
         placeholder="Name"
+        minLength="1"
+        required
         touched={touched.name}
         error={errors.name}
-        required
       />
       <Input
         label="Avatar URL"
@@ -88,10 +97,10 @@ const RegisterModal = ({ onClose, onRegister, isLoading }) => {
         value={values.avatar}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder="Avatar URL (optional)"
+        placeholder="Avatar URL"
+        required
         touched={touched.avatar}
         error={errors.avatar}
-        required={false}
       />
     </ModalWithForm>
   );
