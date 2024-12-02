@@ -14,7 +14,7 @@ import { AppContext } from "../../contexts/AppContext";
 
 function ItemModal({ card, onDeleteItem, isLoading }) {
   const { closeActiveModal } = useContext(AppContext);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isLoggedIn } = useContext(AuthContext);
   const isOwn = currentUser && card.owner === currentUser._id;
 
   const itemDeleteButtonClassName = `modal__delete-button ${
@@ -84,13 +84,15 @@ function ItemModal({ card, onDeleteItem, isLoading }) {
               <h2 className="modal__caption">{card.name}</h2>
               <p className="modal__weather">Weather: {card.weather}</p>
             </div>
-            <button
-              className={itemDeleteButtonClassName}
-              onClick={handleDeleteClick}
-              disabled={isLoading}
-            >
-              Delete item
-            </button>
+            {isLoggedIn && (
+              <button
+                className={itemDeleteButtonClassName}
+                onClick={handleDeleteClick}
+                disabled={isLoading}
+              >
+                Delete item
+              </button>
+            )}
           </div>
         </div>
       </div>
