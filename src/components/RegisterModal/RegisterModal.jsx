@@ -3,6 +3,7 @@ import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
+import "./RegisterModal.css";
 
 const RegisterModal = ({ onClose, onRegister, isLoading, onLoginClick }) => {
   console.log("RegisterModal rendering");

@@ -3,6 +3,7 @@ import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 import { useOverlayClick } from "../../hooks/useOverlayClick";
 import Input from "../Input/Input";
+import "./LoginModal.css";
 
 const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
   const modalRef = useRef(null);
