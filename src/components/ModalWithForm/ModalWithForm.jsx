@@ -15,10 +15,12 @@ const ModalWithForm = React.forwardRef(
     },
     ref
   ) => {
-    console.log("ModalWithForm rendering", { title });
+    console.log("ModalWithForm rendering", { title, isValid });
+    const modalClass = `modal modal_type_form${isValid ? " modal_opened" : ""}`;
+    console.log("Modal class:", modalClass);
 
     return (
-      <div className={`modal ${isOpen ? "modal_opened" : ""}`} ref={ref}>
+      <div className={modalClass} ref={ref}>
         <div className="modal__content">
           <button
             type="button"

@@ -4,6 +4,7 @@ import Input from "../Input/Input";
 import { useFormAndValidation } from "../../hooks/useFormValidation";
 
 const RegisterModal = ({ onClose, onRegister, isLoading }) => {
+  console.log("RegisterModal rendering");
   const { values, handleChange, errors, isValid } = useFormAndValidation({
     email: "",
     password: "",

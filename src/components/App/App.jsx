@@ -68,7 +68,7 @@ function App() {
   };
 
   const closeActiveModal = () => {
-    console.log("Closing active modal");
+    console.log("Closing modal, current activeModal:", activeModal);
     setActiveModal(null);
   };
 
@@ -216,6 +216,11 @@ function App() {
     setUserAvatar(null);
   };
 
+  const handleLoginClick = () => {
+    console.log("Login button clicked, setting activeModal to login");
+    setActiveModal("login");
+  };
+
   const handleLogin = ({ email, password }) => {
     setIsLoading(true);
     login({ email, password })
@@ -232,7 +237,6 @@ function App() {
         setUsername(userData.name);
         setUserAvatar(userData.avatar);
         closeActiveModal();
-        navigate("/profile");
       })
       .catch((error) => {
         console.error("Login error:", error);
@@ -264,11 +268,8 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
-  const handleLoginClick = () => {
-    setActiveModal("login");
-  };
-
   const handleRegisterClick = () => {
+    console.log("Register button clicked, setting activeModal to register");
     setActiveModal("register");
   };
 
@@ -313,6 +314,7 @@ function App() {
         value={{ currentTemperatureUnit, handleToggleSwitchChange }}
       >
         <div className="page">
+          {console.log("Rendering page with activeModal:", activeModal)}
           <div className="page__content">
             <Header
               handleAddButtonClick={handleAddButtonClick}
@@ -320,22 +322,21 @@ function App() {
               onLoginClick={handleLoginClick}
               onRegisterClick={handleRegisterClick}
             />
+            {console.log("About to render Routes")}
             <Routes>
               <Route
                 path="/"
                 element={
                   isLoading ? (
                     <div>Loading...</div>
-                  ) : isLoggedIn ? (
+                  ) : (
                     <Main
                       weatherData={weatherData}
                       handleCardClick={handleCardClick}
                       clothingItems={clothingItems}
                       isLoading={isLoading}
-                      onCardLike={handleCardLike}
+                      onCardLike={isLoggedIn ? handleCardLike : null}
                     />
-                  ) : (
-                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -399,6 +400,7 @@ function App() {
             </Routes>
             <Footer />
           </div>
+          {console.log("About to render modals, activeModal:", activeModal)}
           {activeModal === "add-garment" && (
             <AddItemModal
               onClose={closeActiveModal}

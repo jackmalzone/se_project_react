@@ -4,6 +4,7 @@ import { useFormAndValidation } from "../../hooks/useFormValidation";
 import Input from "../Input/Input";
 
 const LoginModal = ({ onClose, onLogin, isLoading, onRegisterClick }) => {
+  console.log("LoginModal rendering");
   const { values, handleChange, errors, isValid } = useFormAndValidation();
   const [touched, setTouched] = useState({
     email: false,
