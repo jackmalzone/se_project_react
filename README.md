@@ -15,18 +15,45 @@ WTWR is a full-stack web application that helps users decide what to wear based 
 - Like/unlike functionality for clothing items
 - Modal-based user interface for item management
 
+## Demo & Screenshots
+
+![WTWR Demo](path/to/demo.gif)
+
+### Desktop View
+
+![Desktop Screenshot](path/to/desktop.png)
+
+### Mobile View
+
+![Mobile Screenshot](path/to/mobile.png)
+
 ## Technologies & Tools
 
-- React 18
-- Vite
+### Frontend
+
+- React 18 with Vite
 - React Router v6
 - Context API for state management
 - CSS3 with BEM methodology
-- RESTful API integration
+
+### Backend
+
+- Node.js & Express
+- MongoDB
+- JWT Authentication
+- API
+
+### Development Tools
+
+- ESLint & Prettier
+- Git & GitHub
+- Google Chrome DevTools
+- Postman for API testing
 
 ## Links
 
 - [Backend Repository](https://github.com/jackmalzone/se_project_express)
+- [Live Demo](your-deployed-url)
 
 ## Getting Started
 
@@ -42,7 +69,14 @@ WTWR is a full-stack web application that helps users decide what to wear based 
    npm install
    ```
 
-3. Start the development server
+3. Create a .env file in the root directory
+
+   ```env
+   VITE_WEATHER_API_KEY=your_api_key
+   VITE_BASE_URL=your_backend_url
+   ```
+
+4. Start the development server
 
    ```bash
    npm run dev

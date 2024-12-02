@@ -25,14 +25,10 @@ import RegisterModal from "../RegisterModal/RegisterModal";
 import avatarDefault from "../../assets/avatar-placeholder.png";
 import { AuthContext } from "../../contexts/AuthContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-
-console.log("Checking imports:", {
-  Header: !!Header,
-  Main: !!Main,
-  Footer: !!Footer,
-});
+import { useError } from "../../contexts/ErrorContext";
 
 function App() {
+  const { showError } = useError();
   const [weatherData, setWeatherData] = useState({
     type: "",
     temp: { F: null, C: null },
@@ -48,9 +44,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-
-  console.log("App rendering - weatherData:", weatherData);
-  console.log("App rendering - clothingItems:", clothingItems);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
@@ -82,7 +75,14 @@ function App() {
       .then(() => {
         closeActiveModal();
       })
-      .catch(console.error)
+      .catch((error) => {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "An unexpected error occurred";
+        showError(errorMessage);
+        console.error("Operation failed:", error);
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -225,11 +225,11 @@ function App() {
     setIsLoading(true);
     login({ email, password })
       .then((data) => {
-        if (data && data.token) {
-          localStorage.setItem("jwt", data.token);
-          return checkToken(data.token);
+        if (!data || !data.token) {
+          throw new Error("Invalid login response");
         }
-        return Promise.reject("No token received");
+        localStorage.setItem("jwt", data.token);
+        return checkToken(data.token);
       })
       .then((userData) => {
         setIsLoggedIn(true);
@@ -239,6 +239,16 @@ function App() {
         closeActiveModal();
       })
       .catch((error) => {
+        const errorMessage =
+          error.message === "Invalid login response"
+            ? "Invalid email or password"
+            : error.response?.status === 401
+            ? "Invalid email or password"
+            : error.response?.status === 429
+            ? "Too many attempts. Please try again later"
+            : "Unable to log in. Please try again";
+
+        showError(errorMessage);
         console.error("Login error:", error);
       })
       .finally(() => {
@@ -287,24 +297,6 @@ function App() {
         });
     }
   }, []);
-
-  console.log("App rendering - before Routes");
-
-  console.log("App state before render:", {
-    isLoggedIn,
-    weatherData,
-    clothingItems,
-    activeModal,
-  });
-
-  console.log("App rendering structure");
-
-  console.log("About to render Main with:", {
-    isLoggedIn,
-    hasWeatherData: !!weatherData,
-    weatherType: weatherData.type,
-    clothingItemsCount: clothingItems.length,
-  });
 
   const handleCloseModal = useCallback(() => {
     setActiveModal(null);
