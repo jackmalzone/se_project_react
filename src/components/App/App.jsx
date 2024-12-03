@@ -259,24 +259,17 @@ function App() {
 
   const handleRegister = ({ name, avatar, email, password }) => {
     setIsLoading(true);
-    register({ name, avatar, email, password })
-      .then(() => {
-        return login({ email, password });
+    return register({ name, avatar, email, password })
+      .catch((error) => {
+        setIsLoading(false);
+        showError(
+          "This email is already registered. Please try logging in instead."
+        );
+        return Promise.reject(error);
       })
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem("jwt", data.token);
-          checkToken(data.token)
-            .then((userData) => {
-              setCurrentUser(userData);
-              setIsLoggedIn(true);
-              closeActiveModal();
-            })
-            .catch(console.error);
-        }
-      })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleRegisterClick = () => {
@@ -362,11 +355,12 @@ function App() {
                     isLoggedIn ? (
                       <Navigate to="/" replace />
                     ) : (
-                      <LoginModal
-                        onClose={() => navigate("/")}
-                        onLogin={handleLogin}
+                      <Main
+                        weatherData={weatherData}
+                        handleCardClick={handleCardClick}
+                        clothingItems={clothingItems}
                         isLoading={isLoading}
-                        onRegisterClick={handleRegisterClick}
+                        onCardLike={isLoggedIn ? handleCardLike : null}
                       />
                     )
                   }
@@ -377,12 +371,21 @@ function App() {
                     isLoggedIn ? (
                       <Navigate to="/" replace />
                     ) : (
-                      <RegisterModal
-                        onClose={() => navigate("/")}
-                        onRegister={handleRegister}
-                        isLoading={isLoading}
-                        onLoginClick={() => setActiveModal("login")}
-                      />
+                      <>
+                        <Main
+                          weatherData={weatherData}
+                          handleCardClick={handleCardClick}
+                          clothingItems={clothingItems}
+                          isLoading={isLoading}
+                          onCardLike={isLoggedIn ? handleCardLike : null}
+                        />
+                        <RegisterModal
+                          onClose={closeActiveModal}
+                          onRegister={handleRegister}
+                          isLoading={isLoading}
+                          onLoginClick={() => setActiveModal("login")}
+                        />
+                      </>
                     )
                   }
                 />
@@ -432,7 +435,6 @@ function App() {
             )}
             {activeModal === "register" && (
               <RegisterModal
-                onClose={closeActiveModal}
                 onRegister={handleRegister}
                 isLoading={isLoading}
                 onLoginClick={() => setActiveModal("login")}
