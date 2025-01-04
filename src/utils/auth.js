@@ -1,11 +1,14 @@
 import { request } from "./api";
 
-const BASE_URL = "http://localhost:3001";
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.your-domain.com"
+    : "http://localhost:3001";
 
 export const register = ({ name, avatar, email, password }) => {
   console.log("1. Registration attempt:", { name, email, hasAvatar: !!avatar });
 
-  return request(`${BASE_URL}/signup`, {
+  return request(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +23,7 @@ export const register = ({ name, avatar, email, password }) => {
 };
 
 export const login = ({ email, password }) => {
-  return request(`${BASE_URL}/signin`, {
+  return request(`${baseUrl}/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +34,7 @@ export const login = ({ email, password }) => {
 };
 
 export const checkToken = (token) => {
-  return request(`${BASE_URL}/users/me`, {
+  return request(`${baseUrl}/users/me`, {
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
@@ -40,7 +43,7 @@ export const checkToken = (token) => {
 };
 
 export const updateProfile = ({ name, avatar }, token) => {
-  return request(`${BASE_URL}/users/me`, {
+  return request(`${baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

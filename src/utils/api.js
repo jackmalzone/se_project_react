@@ -1,4 +1,7 @@
-const baseUrl = "http://localhost:3001";
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.your-domain.com"
+    : "http://localhost:3001";
 
 function checkResponse(res) {
   if (res.ok) {
@@ -23,7 +26,6 @@ export function getItems() {
   })
     .then((data) => {
       console.log("Server response for items:", data);
-      console.log("Full item data from server:", JSON.stringify(data, null, 2));
       return data;
     })
     .catch((error) => {

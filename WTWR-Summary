@@ -1,0 +1,23 @@
+# WTWR (What to Wear?) - Project Learning Summary
+
+## Project Setup and Structure
+
+###Initial Setup
+
+Created with Vite + React for modern development experience
+Used ESLint and Prettier for code quality
+Implemented BEM methodology for CSS organization
+
+### Project Structure
+
+- src/components: Reusable UI components
+- src/pages: Route-specific pages
+- src/utils: API requests and utility functions
+- src/App.jsx: Main application component
+- src/index.jsx: Entry point for the application
+
+### API Integration
+
+- Used fetch for HTTP requests
+- Implemented JWT authentication for secure API access
+- Handled error handling and status codes
