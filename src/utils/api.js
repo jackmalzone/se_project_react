@@ -1,6 +1,6 @@
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? "https://api.your-domain.com"
+    ? "https://api.wtwrwtwr.twilightparadox.com"
     : "http://localhost:3001";
 
 function checkResponse(res) {

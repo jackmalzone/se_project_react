@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CurrentTempUnitContext from "../../contexts/CurrentTempUnitContext";
-import "../../utils/index.css";
+import "../../index.css";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
